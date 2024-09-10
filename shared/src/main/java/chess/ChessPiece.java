@@ -35,14 +35,14 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        throw new RuntimeException("Not implemented");
+       return pieceColor;
     }
 
     /**
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        throw new RuntimeException("Not implemented");
+        return type;
     }
 
     /**
@@ -56,9 +56,4 @@ public class ChessPiece {
         return new ArrayList<ChessMove>();
     }
 }
-
-    @Override
-    public String toString() {
-    return "ChessPiece"
-    }
 
