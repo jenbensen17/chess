@@ -55,5 +55,8 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         return new ArrayList<ChessMove>();
     }
-}
 
+    public String toString() {
+        return "ChessPiece";
+    }
+}
