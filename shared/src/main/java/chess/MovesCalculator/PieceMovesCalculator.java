@@ -11,4 +11,46 @@ public interface PieceMovesCalculator {
     static Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         return new ArrayList<ChessMove>();
     }
+
+    public static Collection<ChessMove> diagonalMoves(ChessBoard board, ChessPosition myPosition, String direction, Collection<ChessMove> possibleMoves) {
+        int startRow = myPosition.getRow();
+        int startCol = myPosition.getColumn();
+        int rowChange = 0;
+        int colChange = 0;
+        switch (direction) {
+                case "northeast":
+                    colChange = 1;
+                    rowChange = 1;
+                    break;
+                case "southeast":
+                    colChange = 1;
+                    rowChange = -1;
+                    break;
+                case "southwest":
+                    colChange = -1;
+                    rowChange = -1;
+                    break;
+                case "northwest":
+                    colChange = -1;
+                    rowChange = 1;
+                    break;
+
+        }
+        // {-1,1}, {1,1}, {-1,-1}, {1,-1}
+        int currentRow = startRow+rowChange;
+        int currentCol = startCol+colChange;
+        while(currentRow > 0 && currentRow <= 8 && currentCol <= 8 && currentCol > 0) {
+
+            if(board.getPiece(new ChessPosition(currentRow, currentCol)) != null) {
+                System.out.println(board.getPiece(new ChessPosition(currentRow, currentCol)));
+                break;
+            } else {
+                possibleMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow,currentCol), null));
+            }
+            currentCol += colChange;
+            currentRow += rowChange;
+        }
+
+        return possibleMoves;
+    }
 }
