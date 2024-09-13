@@ -8,5 +8,7 @@ import java.util.*;
 
 public interface PieceMovesCalculator {
 
-    Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition);
+    static Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        return new ArrayList<ChessMove>();
+    }
 }

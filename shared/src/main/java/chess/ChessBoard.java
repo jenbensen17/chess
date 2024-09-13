@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -90,15 +91,30 @@ public class ChessBoard {
 
     @Override
     public String toString() {
-        String board = "";
+        String board = "|";
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 if(getPiece(new ChessPosition(i,j))!=null) {
-                    board += getPiece(new ChessPosition(i,j)).toString();
+                    ChessPiece piece = getPiece(new ChessPosition(i,j));
+                    String rep = piece.getPieceType().toString();
+                    if(rep == "KNIGHT") {
+                        rep = "N";
+                    }
+                    if(piece.getTeamColor()== ChessGame.TeamColor.WHITE) {
+                        rep = rep.toLowerCase();
+                    } else {
+                        rep = rep.toUpperCase();
+                    }
+                    board += rep.charAt(0)+"|";
+                }
+                else {
+                    board +=" |";
                 }
 
             }
-            board += "\n";
+            if(i !=8) {
+                board += "\n|";
+            }
         }
         return board;
     }
