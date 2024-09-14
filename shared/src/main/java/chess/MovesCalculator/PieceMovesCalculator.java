@@ -2,6 +2,7 @@ package chess.MovesCalculator;
 
 import chess.ChessBoard;
 import chess.ChessMove;
+import chess.ChessPiece;
 import chess.ChessPosition;
 
 import java.util.*;
@@ -40,9 +41,11 @@ public interface PieceMovesCalculator {
         int currentRow = startRow+rowChange;
         int currentCol = startCol+colChange;
         while(currentRow > 0 && currentRow <= 8 && currentCol <= 8 && currentCol > 0) {
-
-            if(board.getPiece(new ChessPosition(currentRow, currentCol)) != null) {
-                System.out.println(board.getPiece(new ChessPosition(currentRow, currentCol)));
+            ChessPiece piece = board.getPiece(new ChessPosition(currentRow, currentCol));
+            if(piece != null) {
+                if(piece.getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
+                    possibleMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow,currentCol), null));
+                }
                 break;
             } else {
                 possibleMoves.add(new ChessMove(myPosition, new ChessPosition(currentRow,currentCol), null));
