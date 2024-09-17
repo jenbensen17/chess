@@ -9,11 +9,9 @@ import java.util.*;
 
 public interface PieceMovesCalculator {
 
-    static Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return new ArrayList<ChessMove>();
-    }
+     Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition);
 
-    public static Collection<ChessMove> diagonalMoves(ChessBoard board, ChessPosition myPosition, String direction, Collection<ChessMove> possibleMoves) {
+    public static void diagonalMoves(ChessBoard board, ChessPosition myPosition, String direction, Collection<ChessMove> possibleMoves) {
         int startRow = myPosition.getRow();
         int startCol = myPosition.getColumn();
         int rowChange = 0;
@@ -53,7 +51,5 @@ public interface PieceMovesCalculator {
             currentCol += colChange;
             currentRow += rowChange;
         }
-
-        return possibleMoves;
     }
 }

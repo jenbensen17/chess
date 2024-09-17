@@ -11,13 +11,12 @@ import java.util.List;
 
 public class BishopMovesCalculator implements PieceMovesCalculator{
 
-    public static Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-       Collection<ChessMove> validMoves = new ArrayList();
-       System.out.println(board.toString());
-       validMoves = PieceMovesCalculator.diagonalMoves(board,myPosition, "northeast", validMoves);
-       validMoves = PieceMovesCalculator.diagonalMoves(board,myPosition, "northwest", validMoves);
-       validMoves = PieceMovesCalculator.diagonalMoves(board,myPosition, "southeast", validMoves);
-       validMoves = PieceMovesCalculator.diagonalMoves(board,myPosition, "southwest", validMoves);
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+       Collection<ChessMove> validMoves = new ArrayList<>();
+       PieceMovesCalculator.diagonalMoves(board,myPosition, "northeast", validMoves);
+       PieceMovesCalculator.diagonalMoves(board,myPosition, "northwest", validMoves);
+       PieceMovesCalculator.diagonalMoves(board,myPosition, "southeast", validMoves);
+       PieceMovesCalculator.diagonalMoves(board,myPosition, "southwest", validMoves);
        return validMoves;
 
     }

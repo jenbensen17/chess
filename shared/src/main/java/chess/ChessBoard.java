@@ -116,6 +116,6 @@ public class ChessBoard {
                 board += "\n|";
             }
         }
-        return board;
+        return board+"\n";
     }
 }
