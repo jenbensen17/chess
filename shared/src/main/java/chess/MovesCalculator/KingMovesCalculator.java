@@ -15,7 +15,6 @@ public class KingMovesCalculator extends BaseMovesCalculator{
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> validMoves = new HashSet<ChessMove>();
-        System.out.println(board);
         calculateMoves(board, myPosition, -1, -1, validMoves, false);
         calculateMoves(board, myPosition, 1, -1, validMoves, false);
         calculateMoves(board, myPosition, -1, 1, validMoves, false);
@@ -24,7 +23,6 @@ public class KingMovesCalculator extends BaseMovesCalculator{
         calculateMoves(board, myPosition, -1, 0, validMoves, false);
         calculateMoves(board, myPosition, 0, 1, validMoves, false);
         calculateMoves(board, myPosition, 0, -1, validMoves, false);
-        System.out.println(validMoves.size());
         return validMoves;
     }
 }
