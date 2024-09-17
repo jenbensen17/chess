@@ -79,10 +79,14 @@ public class PawnMovesCalculator extends BaseMovesCalculator{
         int row = myPosition.getRow()+rowChange;
         int colLeft = myPosition.getColumn()+colChange1;
         int colRight = myPosition.getColumn()+colChange2;
-        ChessPiece leftPiece = board.getPiece(new ChessPosition(row, colLeft));
-        ChessPiece rightPiece = board.getPiece(new ChessPosition(row, colRight));
-        checkSide(board, myPosition, possibleMoves, promotion, row, colLeft, leftPiece);
-        checkSide(board, myPosition, possibleMoves, promotion, row, colRight, rightPiece);
+        if(colLeft > 0) {
+            ChessPiece leftPiece = board.getPiece(new ChessPosition(row, colLeft));
+            checkSide(board, myPosition, possibleMoves, promotion, row, colLeft, leftPiece);
+        } if(colRight <8) {
+            ChessPiece rightPiece = board.getPiece(new ChessPosition(row, colRight));
+            checkSide(board, myPosition, possibleMoves, promotion, row, colRight, rightPiece);
+        }
+
     }
 
     private void checkSide(ChessBoard board, ChessPosition myPosition, Collection<ChessMove> possibleMoves, boolean promotion, int row, int colRight, ChessPiece rightPiece) {
