@@ -1,9 +1,7 @@
 package chess;
 
 import chess.MovesCalculator.BishopMovesCalculator;
-import chess.MovesCalculator.PieceMovesCalculator;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
