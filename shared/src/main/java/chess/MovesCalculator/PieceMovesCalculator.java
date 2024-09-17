@@ -11,7 +11,7 @@ public interface PieceMovesCalculator {
 
      Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition);
 
-    public static void diagonalMoves(ChessBoard board, ChessPosition myPosition, String direction, Collection<ChessMove> possibleMoves) {
+     static void diagonalMoves(ChessBoard board, ChessPosition myPosition, String direction, Collection<ChessMove> possibleMoves) {
         int startRow = myPosition.getRow();
         int startCol = myPosition.getColumn();
         int rowChange = 0;
