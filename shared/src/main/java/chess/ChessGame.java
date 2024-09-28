@@ -10,18 +10,16 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessGame {
-    private TeamColor teamTurn;
-    private ChessBoard board = new ChessBoard();
+    private final GameState state;
     public ChessGame() {
-        board.resetBoard();
-        teamTurn = TeamColor.WHITE;
+        state = new GameState();
     }
 
     /**
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        return teamTurn;
+        return state.turn();
     }
 
     /**
@@ -30,7 +28,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        teamTurn = team;
+        state.setTeamTurn(team);
     }
 
     /**
@@ -49,12 +47,7 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        ChessPiece piece = board.getPiece(startPosition);
-        if(piece == null) {
-            return null;
-        } else {
-            return piece.pieceMoves(getBoard(), startPosition);
-        }
+        return state.rules().validMoves(state.board(),startPosition);
     }
 
     /**
@@ -74,7 +67,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return state.rules().isInCheck(state.board(),teamColor);
     }
 
     /**
@@ -104,7 +97,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        this.board = board;
+        state.setBoard(board);
     }
 
     /**
@@ -113,7 +106,7 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        return board;
+        return state.board();
     }
 
     @Override
@@ -121,11 +114,11 @@ public class ChessGame {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessGame chessGame = (ChessGame) o;
-        return teamTurn == chessGame.teamTurn && Objects.equals(board, chessGame.board);
+        return state.turn() == chessGame.state.turn() && Objects.equals(state.board(), chessGame.state.board());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(teamTurn, board);
+        return Objects.hash(state.turn(), state.board());
     }
 }

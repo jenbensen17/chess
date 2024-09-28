@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
@@ -74,6 +75,12 @@ public class ChessBoard {
         for(int j = 1; j<=8; j++) {
             addPiece(new ChessPosition(7,j),new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
         }
+    }
+
+    public void movePiece(ChessPosition start, ChessPosition end) {
+        ChessPiece pieceToMove = getPiece(start);
+        addPiece(start, null);
+        addPiece(end, pieceToMove);
     }
 
     @Override
