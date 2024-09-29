@@ -11,7 +11,7 @@ import java.util.Objects;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessBoard {
+public class ChessBoard implements Cloneable{
 
     private ChessPiece[][] squares  = new ChessPiece [8][8];
 
@@ -124,5 +124,20 @@ public class ChessBoard {
             }
         }
         return board+"\n";
+    }
+
+    @Override
+    protected ChessBoard clone() {
+        ChessBoard clone = new ChessBoard();
+        clone.squares = new ChessPiece[8][8];
+        for(int i = 1;i <=8; i++) {
+            for(int j = 1; j<=8; j++) {
+                ChessPiece piece = this.squares[i-1][j-1];
+                if(piece != null) {
+                    clone.squares[i - 1][j - 1] = new ChessPiece(piece.getTeamColor(), piece.getPieceType());
+                }
+            }
+        }
+        return clone;
     }
 }
