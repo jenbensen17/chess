@@ -89,8 +89,24 @@ public class ChessRuleBook {
         return false;
     }
 
-    public boolean isInCheckmate(ChessGame.TeamColor teamColor) {
-        return false;
+    public boolean isInCheckmate(ChessBoard board, ChessGame.TeamColor teamColor) {
+        //iterate over all pieces of teamColor
+        Collection<ChessMove> validMoves = new HashSet<>();
+        Collection<ChessMove> possibleMoves = new HashSet<>();
+        for(int i = 1; i<=8; i++ ) {
+            for(int j = 1; j<=8; j++) {
+                ChessPiece piece = board.getPiece(new ChessPosition(i, j));
+                if(piece != null && piece.getTeamColor() == teamColor) {
+                    possibleMoves = validMoves(board, new ChessPosition(i, j));
+                    for(ChessMove move : possibleMoves) {
+                        validMoves.add(move);
+                    }
+                } else {
+                    continue;
+                }
+            }
+        }
+        return validMoves.isEmpty();
     }
 
     public boolean isInStalemate(ChessGame.TeamColor teamColor) {
