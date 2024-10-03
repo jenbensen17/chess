@@ -11,6 +11,7 @@ import java.util.Objects;
  */
 public class ChessGame {
     private final GameState state;
+
     public ChessGame() {
         state = new GameState();
     }
@@ -47,7 +48,7 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        return state.rules().validMoves(state.board(),startPosition);
+        return state.rules().validMoves(state.board(), startPosition);
     }
 
     /**
@@ -57,17 +58,19 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        if(state.board().getPiece(move.getStartPosition()) == null) {
+        if (state.board().getPiece(move.getStartPosition()) == null) {
             throw new InvalidMoveException();
         }
         Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
+        ChessPiece.PieceType promotionPiece = move.getPromotionPiece();
         TeamColor moveTeam = state.board().getPiece(move.getStartPosition()).getTeamColor();
         TeamColor teamTurn = state.turn();
-        if(validMoves.contains(move) && teamTurn == moveTeam) {
-            state.board().movePiece(move.getStartPosition(), move.getEndPosition());
+        if (validMoves.contains(move) && teamTurn == moveTeam) {
+            state.board().movePiece(move.getStartPosition(), move.getEndPosition(), promotionPiece);
         } else {
             throw new InvalidMoveException();
         }
+        state.nextTurn();
     }
 
     /**
@@ -77,7 +80,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        return state.rules().isInCheck(state.board(),teamColor);
+        return state.rules().isInCheck(state.board(), teamColor);
     }
 
     /**

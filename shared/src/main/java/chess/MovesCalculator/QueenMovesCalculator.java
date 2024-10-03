@@ -19,7 +19,6 @@ public class QueenMovesCalculator extends BaseMovesCalculator{
         calculateMoves(board, myPosition, -1, 0, validMoves, true);
         calculateMoves(board, myPosition, 0, 1, validMoves, true);
         calculateMoves(board, myPosition, 0, -1, validMoves, true);
-        System.out.println(board);
         return validMoves;
     }
 }

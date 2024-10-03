@@ -77,8 +77,11 @@ public class ChessBoard {
         }
     }
 
-    public void movePiece(ChessPosition start, ChessPosition end) {
+    public void movePiece(ChessPosition start, ChessPosition end, ChessPiece.PieceType promotionPiece) {
         ChessPiece pieceToMove = getPiece(start);
+        if(promotionPiece != null) {
+            pieceToMove = new ChessPiece(pieceToMove.getTeamColor(), promotionPiece);
+        }
         addPiece(start, null);
         addPiece(end, pieceToMove);
     }

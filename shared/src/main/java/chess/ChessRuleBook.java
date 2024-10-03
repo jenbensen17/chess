@@ -14,7 +14,6 @@ public class ChessRuleBook {
     }
 
     public Collection<ChessMove> validMoves(ChessBoard board, ChessPosition startPosition) {
-            System.out.println(board);
             ChessPiece piece = board.getPiece(startPosition);
             Collection<ChessMove> possibleMoves = new HashSet<>();
             Collection<ChessMove> validMoves = new HashSet<>();
@@ -40,7 +39,7 @@ public class ChessRuleBook {
                         tempBoard.addPiece(new ChessPosition(i, j), board.getPiece(new ChessPosition(i, j)));
                     }
                 }
-                    tempBoard.movePiece(move.getStartPosition(), move.getEndPosition());
+                    tempBoard.movePiece(move.getStartPosition(), move.getEndPosition(), move.getPromotionPiece());
                     boolean check = isInCheck(tempBoard, piece.getTeamColor());
                     if (check) {
                         continue;

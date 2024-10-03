@@ -13,6 +13,9 @@ public class GameState {
     public ChessGame.TeamColor turn() {
         return turn;
     }
+    public void nextTurn() {
+        turn = turn == ChessGame.TeamColor.WHITE ? ChessGame.TeamColor.BLACK : turn;
+    }
     public ChessBoard board(){
         return board;
     }
