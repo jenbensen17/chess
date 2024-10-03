@@ -1,9 +1,6 @@
 package chess;
 
-import chess.MovementRules.KingMovementRule;
-import chess.MovementRules.KnightMovementRule;
-import chess.MovementRules.QueenMovementRule;
-import chess.MovementRules.RookMovementRule;
+import chess.MovementRules.*;
 import chess.MovesCalculator.KnightMovesCalculator;
 
 import java.util.ArrayList;
@@ -29,6 +26,10 @@ public class ChessRuleBook {
                 case ROOK: possibleMoves = new RookMovementRule().validMoves(board, startPosition);
                             break;
                 case KNIGHT: possibleMoves = new KnightMovementRule().validMoves(board, startPosition);
+                            break;
+                case PAWN: possibleMoves = new PawnMovementRule().validMoves(board, startPosition);
+                            break;
+                case BISHOP: possibleMoves = new BishopMovementRule().validMoves(board, startPosition);
                             break;
             }
             for(ChessMove move : possibleMoves) {
