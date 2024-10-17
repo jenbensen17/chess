@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 public class MemoryGameDAO implements GameDAO {
 
-    private HashSet<GameData> games;
+    private final HashSet<GameData> games;
 
     public MemoryGameDAO() {
         games = new HashSet<>();
@@ -48,5 +48,10 @@ public class MemoryGameDAO implements GameDAO {
             }
             throw new DataAccessException("Game not found");
         }
+    }
+
+    @Override
+    public HashSet<GameData> listGames() throws DataAccessException {
+        return games;
     }
 }

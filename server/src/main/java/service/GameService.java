@@ -20,11 +20,22 @@ public class GameService {
     }
 
     public HashSet<GameData> listGames(AuthData authData) throws DataAccessException {
-        return null;
+        try {
+            AuthData validAuth = authDAO.getAuth(authData.getAuthToken());
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error: Unauthorized");
+        }
+        return gameDAO.listGames();
     }
 
     public int createGame(GameData gameData, AuthData authData) throws DataAccessException {
-        return 0;
+        try {
+            AuthData validAuth = authDAO.getAuth(authData.getAuthToken());
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error: Unauthorized");
+        }
+        gameDAO.createGame(gameData);
+        return gameData.getGameID();
     }
 
     public void joinGame(GameData gameData, AuthData authData, ChessGame.TeamColor playerColor) throws DataAccessException {
