@@ -1,11 +1,19 @@
 package service;
 
+import dataaccess.UserDAO;
 import model.AuthData;
 import model.UserData;
 
 public class UserService {
+
+    UserDAO userDAO;
+
+    public UserService(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
     public AuthData register(UserData userData) {
-        return null;
+
     }
     public AuthData login(UserData userData) {
         return null;

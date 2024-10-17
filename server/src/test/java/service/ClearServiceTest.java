@@ -27,14 +27,11 @@ class ClearServiceTest {
         memoryClearDAO = new MemoryClearDAO(new HashSet<AuthData>(16), new HashSet<UserData>(16)
         , new HashSet<GameData>(16));
         clearService = new ClearService(memoryClearDAO);
-
     }
 
     @Test
     void testClearApp() throws DataAccessException {
         clearService.clearApp();
-
-        Assertions.assertTrue(memoryClearDAO.equals(new MemoryClearDAO()));
-
+        assertEquals(memoryClearDAO, new MemoryClearDAO());
     }
 }
