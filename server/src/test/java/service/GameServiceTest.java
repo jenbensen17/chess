@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import spark.utils.Assert;
 
+import java.util.HashSet;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameServiceTest {
@@ -36,8 +38,20 @@ class GameServiceTest {
     }
 
     @Test
-    void listGames() {
+    void listGames() throws DataAccessException {
+        GameData testGame2 = new GameData(4321, "whitePlayer", "blackPlayer", "testGame", new ChessGame());
+        gameService.createGame(testGame, testAuth);
+        gameService.createGame(testGame2, testAuth);
+        HashSet<GameData> expected = new HashSet<>();
+        expected.add(testGame);
+        expected.add(testGame2);
+        HashSet<GameData> games = gameService.listGames(testAuth);
+        Assertions.assertEquals(expected, games);
+    }
 
+    @Test
+    void listGames_fail() throws DataAccessException {
+       Assertions.assertThrows(DataAccessException.class, () -> gameService.listGames(new AuthData("invalidToken", "testUser")));
     }
 
     @Test
