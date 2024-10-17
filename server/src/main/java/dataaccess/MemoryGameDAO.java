@@ -39,10 +39,20 @@ public class MemoryGameDAO implements GameDAO {
             if (gameData.getGameID() == gameID) {
                 // update black player
                 if(playerColor.equals(ChessGame.TeamColor.BLACK)) {
+                    if(gameData.getBlackUsername() != null) {
+                        throw new DataAccessException("Error: Already Taken");
+                    }
+                    games.remove(gameData);
                     gameData = new GameData(gameID, gameData.getWhiteUsername(), authData.getUsername(), gameData.getGameName(), gameData.getGame());
+                    games.add(gameData);
                 } else {
+                    if(gameData.getWhiteUsername() != null) {
+                        throw new DataAccessException("Error: Already Taken");
+                    }
                     //update white player
+                    games.remove(gameData);
                     gameData = new GameData(gameID, authData.getUsername(), gameData.getBlackUsername(), gameData.getGameName(), gameData.getGame());
+                    games.add(gameData);
                 }
                 return;
             }
