@@ -42,4 +42,18 @@ class UserServiceTest {
             userService.register(testUser);
         });
     }
+
+    @Test
+    void login() throws DataAccessException {
+        userService.register(testUser);
+        AuthData authData = userService.login(testUser);
+        assertNotNull(authData);
+    }
+
+    @Test
+    void login_fail() {
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            userService.login(testUser);
+        });
+    }
 }

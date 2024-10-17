@@ -34,8 +34,17 @@ public class UserService {
         throw new DataAccessException("User already exists");
     }
 
-    public AuthData login(UserData userData) {
-        return null;
+    public AuthData login(UserData userData) throws DataAccessException {
+        try{
+            UserData findUser = userDAO.getUserData(userData.getUsername());
+        } //user does not exist
+        catch (DataAccessException e) {
+            throw new DataAccessException("User does not exist");
+        }
+        String authToken = UUID.randomUUID().toString();
+        AuthData authData = new AuthData(authToken, userData.getUsername());
+        authDAO.createAuth(authData);
+        return authData;
     }
 
     public void logout(AuthData authData) {
