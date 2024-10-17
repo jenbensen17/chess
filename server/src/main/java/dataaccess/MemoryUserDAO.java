@@ -8,6 +8,10 @@ public class MemoryUserDAO implements UserDAO {
 
     private HashSet<UserData> users;
 
+    public MemoryUserDAO() {
+        users = new HashSet<>();
+    }
+
     @Override
     public UserData getUserData(String username) throws DataAccessException {
         UserData user = null;
