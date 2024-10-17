@@ -56,4 +56,22 @@ class UserServiceTest {
             userService.login(testUser);
         });
     }
+
+    @Test
+    void logout() throws DataAccessException {
+        userService.register(testUser);
+        AuthData authData = userService.login(testUser);
+        userService.logout(authData);
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            authDAO.getAuth(authData.getAuthToken());
+        });
+    }
+
+    @Test
+    void logout_fail() throws DataAccessException {
+        AuthData authData = new AuthData("invalidAuthToken", "testUser");
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            userService.logout(authData);
+        });
+    }
 }

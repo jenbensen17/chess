@@ -47,7 +47,13 @@ public class UserService {
         return authData;
     }
 
-    public void logout(AuthData authData) {
-
+    public void logout(AuthData authData) throws DataAccessException {
+        try {
+            authDAO.getAuth(authData.getAuthToken());
+        } //unauthorized
+        catch (DataAccessException e) {
+            throw new DataAccessException("Error: Unauthorized");
+        }
+        authDAO.deleteAuth(authData.getAuthToken());
     }
 }
