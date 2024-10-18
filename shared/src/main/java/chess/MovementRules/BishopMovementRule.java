@@ -8,10 +8,10 @@ import chess.MovesCalculator.BishopMovesCalculator;
 import java.util.Collection;
 import java.util.List;
 
-public class BishopMovementRule implements MovementRule{
+public class BishopMovementRule implements MovementRule {
 
     @Override
     public Collection<ChessMove> validMoves(ChessBoard board, ChessPosition startPosition) {
-        return new BishopMovesCalculator().pieceMoves(board,startPosition);
+        return new BishopMovesCalculator().pieceMoves(board, startPosition);
     }
 }

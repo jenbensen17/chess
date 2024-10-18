@@ -7,7 +7,7 @@ import chess.ChessPosition;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class QueenMovesCalculator extends BaseMovesCalculator{
+public class QueenMovesCalculator extends BaseMovesCalculator {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> validMoves = new HashSet<ChessMove>();

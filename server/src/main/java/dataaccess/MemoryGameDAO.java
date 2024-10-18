@@ -30,27 +30,27 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public void createGame(GameData gameData) throws DataAccessException {
-        int gameID = games.size()+1;
+        int gameID = games.size() + 1;
         gameData = new GameData(gameID, gameData.getWhiteUsername(), gameData.getBlackUsername(), gameData.getGameName(), gameData.getGame());
         games.add(gameData);
     }
 
     @Override
     public void updateGame(int gameID, ChessGame.TeamColor playerColor, AuthData authData) throws DataAccessException {
-        if(playerColor == null) {
+        if (playerColor == null) {
             throw new DataAccessException("Player color is null");
         }
         for (GameData gameData : games) {
             if (gameData.getGameID() == gameID) {
-                if(playerColor.equals(ChessGame.TeamColor.BLACK)) {
-                    if(gameData.getBlackUsername() != null) {
+                if (playerColor.equals(ChessGame.TeamColor.BLACK)) {
+                    if (gameData.getBlackUsername() != null) {
                         throw new DataAccessException("Error: Already Taken");
                     }
                     games.remove(gameData);
                     gameData = new GameData(gameID, gameData.getWhiteUsername(), authData.getUsername(), gameData.getGameName(), gameData.getGame());
                     games.add(gameData);
                 } else {
-                    if(gameData.getWhiteUsername() != null) {
+                    if (gameData.getWhiteUsername() != null) {
                         throw new DataAccessException("Error: Already Taken");
                     }
                     games.remove(gameData);

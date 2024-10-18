@@ -38,7 +38,7 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-       return pieceColor;
+        return pieceColor;
     }
 
     /**
@@ -56,15 +56,21 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        switch(this.type) {
-            case KING:  return  new KingMovesCalculator().pieceMoves(board, myPosition);
-            case BISHOP: return new BishopMovesCalculator().pieceMoves(board, myPosition);
-            case KNIGHT: return new KnightMovesCalculator().pieceMoves(board, myPosition);
-            case PAWN: return new PawnMovesCalculator().pieceMoves(board, myPosition);
-            case QUEEN: return new QueenMovesCalculator().pieceMoves(board, myPosition);
-            case ROOK: return new RookMovesCalculator().pieceMoves(board, myPosition);
+        switch (this.type) {
+            case KING:
+                return new KingMovesCalculator().pieceMoves(board, myPosition);
+            case BISHOP:
+                return new BishopMovesCalculator().pieceMoves(board, myPosition);
+            case KNIGHT:
+                return new KnightMovesCalculator().pieceMoves(board, myPosition);
+            case PAWN:
+                return new PawnMovesCalculator().pieceMoves(board, myPosition);
+            case QUEEN:
+                return new QueenMovesCalculator().pieceMoves(board, myPosition);
+            case ROOK:
+                return new RookMovesCalculator().pieceMoves(board, myPosition);
         }
-        return  new ArrayList<ChessMove>();
+        return new ArrayList<ChessMove>();
     }
 
     @Override
@@ -77,8 +83,8 @@ public class ChessPiece {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
         ChessPiece that = (ChessPiece) o;
         return pieceColor == that.pieceColor && type == that.type;
     }

@@ -14,14 +14,15 @@ public class AuthData {
     public String getAuthToken() {
         return authToken;
     }
+
     public String getUsername() {
         return username;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
         AuthData authData = (AuthData) o;
         return Objects.equals(authToken, authData.authToken) && Objects.equals(username, authData.username);
     }

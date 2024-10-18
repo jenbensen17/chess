@@ -11,10 +11,10 @@ public abstract class BaseMovesCalculator implements MovesCalculator {
 
     protected void calculateMoves(ChessBoard board, ChessPosition myPosition, int rowChange, int colChange,
                                   Collection<ChessMove> possibleMoves, boolean allowDistance) {
-        int currentRow = myPosition.getRow()+rowChange;
-        int currentCol = myPosition.getColumn()+colChange;
+        int currentRow = myPosition.getRow() + rowChange;
+        int currentCol = myPosition.getColumn() + colChange;
         do {
-            if( currentRow > 0 && currentRow <= 8 && currentCol <= 8 && currentCol > 0) {
+            if (currentRow > 0 && currentRow <= 8 && currentCol <= 8 && currentCol > 0) {
                 ChessPiece piece = board.getPiece(new ChessPosition(currentRow, currentCol));
                 if (piece != null) {
                     if (piece.getTeamColor() != board.getPiece(myPosition).getTeamColor()) {
@@ -27,7 +27,7 @@ public abstract class BaseMovesCalculator implements MovesCalculator {
                 currentCol += colChange;
                 currentRow += rowChange;
             }
-        } while(allowDistance && currentRow > 0 && currentRow <= 8 && currentCol <= 8 && currentCol > 0);
+        } while (allowDistance && currentRow > 0 && currentRow <= 8 && currentCol <= 8 && currentCol > 0);
     }
 
     public abstract Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition);

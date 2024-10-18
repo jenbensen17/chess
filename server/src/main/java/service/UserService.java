@@ -21,7 +21,7 @@ public class UserService {
     public AuthData register(UserData user) throws DataAccessException {
         try {
             UserData findUser = userDAO.getUserData(user.getUsername());
-        } catch(DataAccessException e) {
+        } catch (DataAccessException e) {
             userDAO.createUser(user);
             String authToken = UUID.randomUUID().toString();
             AuthData authData = new AuthData(authToken, user.getUsername());
@@ -32,9 +32,9 @@ public class UserService {
     }
 
     public AuthData login(UserData userData) throws DataAccessException {
-        try{
+        try {
             UserData findUser = userDAO.getUserData(userData.getUsername());
-            if(!findUser.getPassword().equals(userData.getPassword())){
+            if (!findUser.getPassword().equals(userData.getPassword())) {
                 throw new DataAccessException("Incorrect password");
             }
         } catch (DataAccessException e) {

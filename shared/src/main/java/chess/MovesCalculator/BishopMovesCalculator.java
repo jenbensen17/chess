@@ -10,10 +10,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-public class BishopMovesCalculator extends BaseMovesCalculator{
+public class BishopMovesCalculator extends BaseMovesCalculator {
 
     @Override
-    public  Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> validMoves = new HashSet<ChessMove>();
         calculateMoves(board, myPosition, -1, -1, validMoves, true);
         calculateMoves(board, myPosition, 1, -1, validMoves, true);

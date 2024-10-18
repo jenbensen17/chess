@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 public class MemoryUserDAO implements UserDAO {
 
-    private HashSet<UserData> users;
+    private final HashSet<UserData> users;
 
     public MemoryUserDAO() {
         users = new HashSet<>();
@@ -15,12 +15,12 @@ public class MemoryUserDAO implements UserDAO {
     @Override
     public UserData getUserData(String username) throws DataAccessException {
         UserData user = null;
-        for(UserData userData : users) {
-            if(userData.getUsername().equals(username)) {
+        for (UserData userData : users) {
+            if (userData.getUsername().equals(username)) {
                 user = userData;
             }
         }
-        if(user!= null) {
+        if (user != null) {
             return user;
         }
         throw new DataAccessException("User not found");

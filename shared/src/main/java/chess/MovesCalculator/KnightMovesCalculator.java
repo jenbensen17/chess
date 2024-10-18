@@ -7,7 +7,7 @@ import chess.ChessPosition;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class KnightMovesCalculator extends BaseMovesCalculator{
+public class KnightMovesCalculator extends BaseMovesCalculator {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> validMoves = new HashSet<ChessMove>();
         calculateMoves(board, myPosition, 2, 1, validMoves, false);

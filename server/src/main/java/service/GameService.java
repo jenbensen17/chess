@@ -41,7 +41,7 @@ public class GameService {
 
     public void joinGame(GameData gameData, AuthData authData, ChessGame.TeamColor playerColor) throws DataAccessException {
         AuthData validAuth;
-        try{
+        try {
             validAuth = authDAO.getAuth(authData.getAuthToken());
         } catch (DataAccessException e) {
             throw new DataAccessException("Error: Unauthorized");

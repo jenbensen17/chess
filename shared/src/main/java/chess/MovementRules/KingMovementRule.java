@@ -8,7 +8,7 @@ import chess.MovesCalculator.KingMovesCalculator;
 import java.util.Collection;
 import java.util.List;
 
-public class KingMovementRule implements MovementRule{
+public class KingMovementRule implements MovementRule {
     @Override
     public Collection<ChessMove> validMoves(ChessBoard board, ChessPosition startPosition) {
         return new KingMovesCalculator().pieceMoves(board, startPosition);

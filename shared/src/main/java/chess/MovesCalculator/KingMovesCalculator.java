@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-public class KingMovesCalculator extends BaseMovesCalculator{
+public class KingMovesCalculator extends BaseMovesCalculator {
 
 
     @Override

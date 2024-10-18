@@ -8,5 +8,5 @@ import chess.ChessRuleBook;
 import java.util.Collection;
 
 public interface MovementRule {
-    public Collection<ChessMove> validMoves(ChessBoard board, ChessPosition startPosition);
+    Collection<ChessMove> validMoves(ChessBoard board, ChessPosition startPosition);
 }

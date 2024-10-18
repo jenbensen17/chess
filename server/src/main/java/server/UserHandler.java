@@ -18,7 +18,7 @@ public class UserHandler {
     public Object register(Request req, Response res) throws DataAccessException {
         var serializer = new Gson();
         RegisterRequest registerRequest = serializer.fromJson(req.body(), RegisterRequest.class);
-        if(registerRequest.username() == null || registerRequest.password() == null ||
+        if (registerRequest.username() == null || registerRequest.password() == null ||
                 registerRequest.email() == null) {
             res.status(400);
             return "{ \"message\": \"Error: bad request\" }";

@@ -7,6 +7,7 @@ import model.*;
 import service.GameService;
 import spark.Request;
 import spark.Response;
+
 import java.util.HashSet;
 
 public class GameHandler {
@@ -23,7 +24,7 @@ public class GameHandler {
         String authToken = req.headers("authorization");
         int newGameID;
         try {
-            newGameID = gameService.createGame(new GameData(0,null, null, createGameRequest.gameName(),new ChessGame()), new AuthData(authToken, null));
+            newGameID = gameService.createGame(new GameData(0, null, null, createGameRequest.gameName(), new ChessGame()), new AuthData(authToken, null));
         } catch (DataAccessException e) {
             res.status(401);
             return "{ \"message\": \"Error: unauthorized\" }";
@@ -41,10 +42,10 @@ public class GameHandler {
             GameData gameToJoin = new GameData(joinGameRequest.gameID(), null, null, null, null);
             gameService.joinGame(gameToJoin, new AuthData(authToken, null), joinGameRequest.playerColor());
         } catch (DataAccessException e) {
-            if(e.getMessage().equals("Error: Unauthorized")) {
+            if (e.getMessage().equals("Error: Unauthorized")) {
                 res.status(401);
                 return "{ \"message\": \"Error: unauthorized\" }";
-            } else if(e.getMessage().equals("Error: Already Taken")) {
+            } else if (e.getMessage().equals("Error: Already Taken")) {
                 res.status(403);
                 return "{ \"message\": \"Error: already taken\" }";
             } else {
@@ -61,7 +62,7 @@ public class GameHandler {
         ListGamesRequest listGamesRequest = new ListGamesRequest(req.headers("authorization"));
         HashSet<GameData> gamesList;
         try {
-            gamesList = gameService.listGames(new AuthData(listGamesRequest.authToken(),null));
+            gamesList = gameService.listGames(new AuthData(listGamesRequest.authToken(), null));
         } catch (DataAccessException e) {
             res.status(401);
             return "{ \"message\": \"Error: unauthorized\" }";
