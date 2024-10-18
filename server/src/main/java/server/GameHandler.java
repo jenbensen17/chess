@@ -10,6 +10,7 @@ import spark.Request;
 import spark.Response;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class GameHandler {
@@ -22,10 +23,11 @@ public class GameHandler {
 
     public Object createGame(Request req, Response res) {
         var serializer = new Gson();
-        CreateGameRequest createGameRequest = new CreateGameRequest(req.headers("authorization"), req.body());
+        CreateGameRequest createGameRequest = serializer.fromJson(req.body(), CreateGameRequest.class);
+        String authToken = req.headers("authorization");
         int newGameID;
         try {
-            newGameID = gameService.createGame(new GameData(0,null, null, createGameRequest.gameName(),new ChessGame()), new AuthData(createGameRequest.authToken(), null));
+            newGameID = gameService.createGame(new GameData(0,null, null, createGameRequest.gameName(),new ChessGame()), new AuthData(authToken, null));
         } catch (DataAccessException e) {
             res.status(401);
             return "{ \"message\": \"Error: unauthorized\" }";
@@ -56,5 +58,21 @@ public class GameHandler {
         }
         res.status(200);
         return "{}";
+    }
+
+    public Object listGames(Request req, Response res) {
+        var serializer = new Gson();
+        ListGamesRequest listGamesRequest = new ListGamesRequest(req.headers("authorization"));
+        HashSet<GameData> gamesList;
+        try {
+            gamesList = gameService.listGames(new AuthData(listGamesRequest.authToken(),null));
+        } catch (DataAccessException e) {
+            res.status(401);
+            return "{ \"message\": \"Error: unauthorized\" }";
+        }
+        ListGamesResult listGamesResult = new ListGamesResult(gamesList);
+        var json = new Gson().toJson(listGamesResult);
+        res.status(200);
+        return json;
     }
 }

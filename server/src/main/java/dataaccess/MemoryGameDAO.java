@@ -61,8 +61,8 @@ public class MemoryGameDAO implements GameDAO {
                 }
                 return;
             }
-            throw new DataAccessException("Game not found");
         }
+        throw new DataAccessException("Game not found");
     }
 
     @Override
