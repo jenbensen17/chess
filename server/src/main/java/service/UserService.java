@@ -37,6 +37,9 @@ public class UserService {
     public AuthData login(UserData userData) throws DataAccessException {
         try{
             UserData findUser = userDAO.getUserData(userData.getUsername());
+            if(!findUser.getPassword().equals(userData.getPassword())){
+                throw new DataAccessException("Incorrect password");
+            }
         } //user does not exist
         catch (DataAccessException e) {
             throw new DataAccessException("User does not exist");

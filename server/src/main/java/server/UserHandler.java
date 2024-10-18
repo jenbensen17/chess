@@ -2,10 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
-import model.AuthData;
-import model.RegisterRequest;
-import model.RegisterResult;
-import model.UserData;
+import model.*;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -36,6 +33,21 @@ public class UserHandler {
         res.status(200);
         RegisterResult registerResult = new RegisterResult(authData.getUsername(), authData.getAuthToken());
         var json = serializer.toJson(registerResult);
+        return json;
+    }
+
+    public Object login(Request req, Response res) throws DataAccessException {
+        var serializer = new Gson();
+        LoginRequest loginRequest = serializer.fromJson(req.body(), LoginRequest.class);
+        AuthData authData;
+        try {
+            authData = userService.login(new UserData(loginRequest.username(), loginRequest.password(), null));
+        } catch (DataAccessException e) {
+            res.status(401);
+            return "{ \"message\": \"Error: unauthorized\" }";
+        }
+        LoginResult loginResult = new LoginResult(authData.getUsername(), authData.getAuthToken());
+        var json = serializer.toJson(loginResult);
         return json;
     }
 }
