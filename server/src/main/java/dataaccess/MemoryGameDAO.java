@@ -30,6 +30,8 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public void createGame(GameData gameData) throws DataAccessException {
+        int gameID = games.size()+1;
+        gameData = new GameData(gameID, gameData.getWhiteUsername(), gameData.getBlackUsername(), gameData.getGameName(), gameData.getGame());
         games.add(gameData);
     }
 

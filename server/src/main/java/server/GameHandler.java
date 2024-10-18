@@ -26,9 +26,9 @@ public class GameHandler {
     public Object createGame(Request req, Response res) {
         var serializer = new Gson();
         CreateGameRequest createGameRequest = new CreateGameRequest(req.headers("authorization"), req.body());
-        int newGameID = UUID.randomUUID().hashCode();
+        int newGameID;
         try {
-            newGameID = gameService.createGame(new GameData(newGameID,null, null, createGameRequest.gameName(),new ChessGame()), new AuthData(createGameRequest.authToken(), null));
+            newGameID = gameService.createGame(new GameData(0,null, null, createGameRequest.gameName(),new ChessGame()), new AuthData(createGameRequest.authToken(), null));
         } catch (DataAccessException e) {
             res.status(401);
             return "{ \"message\": \"Error: unauthorized\" }";
