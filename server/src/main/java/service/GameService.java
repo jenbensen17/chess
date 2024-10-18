@@ -40,12 +40,13 @@ public class GameService {
     }
 
     public void joinGame(GameData gameData, AuthData authData, ChessGame.TeamColor playerColor) throws DataAccessException {
+        AuthData validAuth;
         try{
-            AuthData validAuth = authDAO.getAuth(authData.getAuthToken());
+            validAuth = authDAO.getAuth(authData.getAuthToken());
         } catch (DataAccessException e) {
             throw new DataAccessException("Error: Unauthorized");
         }
         GameData validGame = gameDAO.getGame(gameData.getGameID());
-        gameDAO.updateGame(validGame.getGameID(), playerColor, authData);
+        gameDAO.updateGame(validGame.getGameID(), playerColor, validAuth);
     }
 }

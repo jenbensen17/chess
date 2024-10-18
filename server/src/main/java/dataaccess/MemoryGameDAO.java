@@ -37,6 +37,9 @@ public class MemoryGameDAO implements GameDAO {
 
     @Override
     public void updateGame(int gameID, ChessGame.TeamColor playerColor, AuthData authData) throws DataAccessException {
+        if(playerColor == null) {
+            throw new DataAccessException("Player color is null");
+        }
         for (GameData gameData : games) {
             if (gameData.getGameID() == gameID) {
                 // update black player
