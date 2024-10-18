@@ -1,12 +1,11 @@
-package chess.MovementRules;
+package chess.movementrules;
 
 import chess.ChessBoard;
 import chess.ChessMove;
 import chess.ChessPosition;
-import chess.MovesCalculator.QueenMovesCalculator;
+import chess.movescalculator.QueenMovesCalculator;
 
 import java.util.Collection;
-import java.util.List;
 
 public class QueenMovementRule implements MovementRule {
     @Override

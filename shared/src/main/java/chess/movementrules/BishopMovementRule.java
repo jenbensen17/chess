@@ -1,12 +1,11 @@
-package chess.MovementRules;
+package chess.movementrules;
 
 import chess.ChessBoard;
 import chess.ChessMove;
 import chess.ChessPosition;
-import chess.MovesCalculator.BishopMovesCalculator;
+import chess.movescalculator.BishopMovesCalculator;
 
 import java.util.Collection;
-import java.util.List;
 
 public class BishopMovementRule implements MovementRule {
 

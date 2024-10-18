@@ -24,7 +24,8 @@ public class GameHandler {
         String authToken = req.headers("authorization");
         int newGameID;
         try {
-            newGameID = gameService.createGame(new GameData(0, null, null, createGameRequest.gameName(), new ChessGame()), new AuthData(authToken, null));
+            newGameID = gameService.createGame(new GameData(0, null, null,
+                    createGameRequest.gameName(), new ChessGame()), new AuthData(authToken, null));
         } catch (DataAccessException e) {
             res.status(401);
             return "{ \"message\": \"Error: unauthorized\" }";

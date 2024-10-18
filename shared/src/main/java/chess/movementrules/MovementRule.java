@@ -1,9 +1,8 @@
-package chess.MovementRules;
+package chess.movementrules;
 
 import chess.ChessBoard;
 import chess.ChessMove;
 import chess.ChessPosition;
-import chess.ChessRuleBook;
 
 import java.util.Collection;
 

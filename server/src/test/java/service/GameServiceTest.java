@@ -55,7 +55,7 @@ class GameServiceTest {
     }
 
     @Test
-    void listGames_fail() throws DataAccessException {
+    void listGamesFail() throws DataAccessException {
        Assertions.assertThrows(DataAccessException.class, () -> gameService.listGames(new AuthData("invalidToken", "testUser")));
     }
 
@@ -66,7 +66,7 @@ class GameServiceTest {
     }
 
     @Test
-    void createGame_fail() throws DataAccessException {
+    void createGameFail() throws DataAccessException {
         Assertions.assertThrows(DataAccessException.class, () -> {
             gameService.createGame(testGame, new AuthData("invalidToken", "testUser"));
         });
@@ -82,7 +82,7 @@ class GameServiceTest {
     }
 
     @Test
-    void joinGame_fail() throws DataAccessException {
+    void joinGameFail() throws DataAccessException {
         gameService.createGame(testGame, testAuth);
         Assertions.assertThrows(DataAccessException.class, () -> {
             gameService.joinGame(testGame,testAuth, ChessGame.TeamColor.BLACK);

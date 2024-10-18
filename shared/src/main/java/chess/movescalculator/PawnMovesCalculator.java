@@ -1,10 +1,9 @@
-package chess.MovesCalculator;
+package chess.movescalculator;
 
 import chess.*;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 public class PawnMovesCalculator extends BaseMovesCalculator {
 

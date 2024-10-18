@@ -1,9 +1,7 @@
 package chess;
 
-import chess.MovementRules.*;
-import chess.MovesCalculator.KnightMovesCalculator;
+import chess.movementrules.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 

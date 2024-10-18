@@ -1,12 +1,11 @@
-package chess.MovementRules;
+package chess.movementrules;
 
 import chess.ChessBoard;
 import chess.ChessMove;
 import chess.ChessPosition;
-import chess.MovesCalculator.PawnMovesCalculator;
+import chess.movescalculator.PawnMovesCalculator;
 
 import java.util.Collection;
-import java.util.List;
 
 public class PawnMovementRule implements MovementRule {
     @Override

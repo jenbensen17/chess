@@ -1,13 +1,11 @@
-package chess.MovesCalculator;
+package chess.movescalculator;
 
 import chess.ChessBoard;
 import chess.ChessMove;
 import chess.ChessPosition;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 public class KingMovesCalculator extends BaseMovesCalculator {
 

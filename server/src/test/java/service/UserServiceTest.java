@@ -42,7 +42,7 @@ class UserServiceTest {
     }
 
     @Test
-    void register_fail() throws DataAccessException {
+    void registerFail() throws DataAccessException {
         AuthData authData = userService.register(testUser);
         Assertions.assertThrows(DataAccessException.class, () -> {
             userService.register(testUser);
@@ -57,7 +57,7 @@ class UserServiceTest {
     }
 
     @Test
-    void login_fail() {
+    void loginFail() {
         Assertions.assertThrows(DataAccessException.class, () -> {
             userService.login(testUser);
         });
@@ -74,7 +74,7 @@ class UserServiceTest {
     }
 
     @Test
-    void logout_fail() throws DataAccessException {
+    void logoutFail() throws DataAccessException {
         AuthData authData = new AuthData("invalidAuthToken", "testUser");
         Assertions.assertThrows(DataAccessException.class, () -> {
             userService.logout(authData);

@@ -1,12 +1,11 @@
-package chess.MovementRules;
+package chess.movementrules;
 
 import chess.ChessBoard;
 import chess.ChessMove;
 import chess.ChessPosition;
-import chess.MovesCalculator.RookMovesCalculator;
+import chess.movescalculator.RookMovesCalculator;
 
 import java.util.Collection;
-import java.util.List;
 
 public class RookMovementRule implements MovementRule {
     @Override
