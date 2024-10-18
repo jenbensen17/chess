@@ -52,7 +52,6 @@ public class UserHandler {
     }
 
     public Object logout(Request req, Response res) throws DataAccessException {
-        var serializer = new Gson();
         LogoutRequest logoutRequest = new LogoutRequest(req.headers("authorization"));
         try {
             userService.logout(new AuthData(logoutRequest.authToken(), null));
