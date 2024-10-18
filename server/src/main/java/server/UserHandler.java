@@ -21,7 +21,18 @@ public class UserHandler {
     public Object register(Request req, Response res) throws DataAccessException {
         var serializer = new Gson();
         RegisterRequest registerRequest = serializer.fromJson(req.body(), RegisterRequest.class);
-        AuthData authData = userService.register(new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email()));
+        if(registerRequest.username() == null || registerRequest.password() == null ||
+                registerRequest.email() == null || registerRequest.password() == null) {
+            res.status(400);
+            return "{ \"message\": \"Error: bad request\" }";
+        }
+        AuthData authData;
+        try {
+            authData = userService.register(new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email()));
+        } catch (DataAccessException e) {
+            res.status(403);
+            return "{ \"message\": \"Error: already taken\" }";
+        }
         res.status(200);
         RegisterResult registerResult = new RegisterResult(authData.getUsername(), authData.getAuthToken());
         var json = serializer.toJson(registerResult);
