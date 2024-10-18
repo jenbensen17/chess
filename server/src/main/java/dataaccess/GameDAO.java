@@ -11,4 +11,5 @@ public interface GameDAO {
     public void createGame(GameData gameData) throws DataAccessException;
     public void updateGame(int gameID, ChessGame.TeamColor playerColor, AuthData authData) throws DataAccessException;
     public HashSet<GameData> listGames() throws DataAccessException;
+    public void removeGames();
 }

@@ -64,4 +64,9 @@ public class MemoryGameDAO implements GameDAO {
     public HashSet<GameData> listGames() throws DataAccessException {
         return games;
     }
+
+    @Override
+    public void removeGames() {
+        games.clear();
+    }
 }

@@ -7,23 +7,23 @@ import spark.*;
 
 public class Server {
 
-    ClearDAO clearDAO;
     ClearService clearService;
     ClearHandler clearHandler;
 
     UserDAO userDAO;
     AuthDAO authDAO;
+    GameDAO gameDAO;
     UserService userService;
     UserHandler userHandler;
 
     public Server() {
-        clearDAO = new MemoryClearDAO();
-        clearService = new ClearService(clearDAO);
-        clearHandler = new ClearHandler(clearService);
         userDAO = new MemoryUserDAO();
         authDAO = new MemoryAuthDAO();
+        gameDAO = new MemoryGameDAO();
         userService = new UserService(userDAO, authDAO);
         userHandler = new UserHandler(userService);
+        clearService = new ClearService(userDAO, gameDAO, authDAO);
+        clearHandler = new ClearHandler(clearService);
     }
 
     public int run(int desiredPort) {

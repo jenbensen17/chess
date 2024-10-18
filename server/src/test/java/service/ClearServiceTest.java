@@ -1,8 +1,7 @@
 package service;
 
-import dataaccess.ClearDAO;
-import dataaccess.DataAccessException;
-import dataaccess.MemoryClearDAO;
+import chess.ChessGame;
+import dataaccess.*;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
@@ -11,11 +10,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 class ClearServiceTest {
 
-    private ClearDAO memoryClearDAO;
+    private UserDAO userDAO;
+    private GameDAO gameDAO;
+    private AuthDAO authDAO;
     private ClearService clearService;
 
     @Test
@@ -23,15 +25,27 @@ class ClearServiceTest {
     }
 
     @BeforeEach
-    void setUp() {
-        memoryClearDAO = new MemoryClearDAO(new HashSet<AuthData>(16), new HashSet<UserData>(16)
-        , new HashSet<GameData>(16));
-        clearService = new ClearService(memoryClearDAO);
+    void setUp() throws DataAccessException {
+        userDAO = new MemoryUserDAO();
+        userDAO.createUser(new UserData("testUser", "password", "test@gmail.com"));
+        gameDAO = new MemoryGameDAO();
+        gameDAO.createGame(new GameData(123, "white", "black", "test", new ChessGame()));
+        authDAO = new MemoryAuthDAO();
+        authDAO.createAuth(new AuthData("4567","test"));
+        clearService = new ClearService(userDAO, gameDAO, authDAO);
     }
 
     @Test
     void testClearApp() throws DataAccessException {
         clearService.clearApp();
-        assertEquals(memoryClearDAO, new MemoryClearDAO());
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            userDAO.getUserData("testUser");
+        });
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            gameDAO.getGame(123);
+        });
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            authDAO.getAuth("4567");
+        });
     }
 }

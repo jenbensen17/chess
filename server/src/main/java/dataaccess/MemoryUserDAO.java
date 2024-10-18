@@ -30,4 +30,9 @@ public class MemoryUserDAO implements UserDAO {
     public void createUser(UserData user) throws DataAccessException {
         users.add(user);
     }
+
+    @Override
+    public void removeUsers() {
+        users.clear();
+    }
 }
