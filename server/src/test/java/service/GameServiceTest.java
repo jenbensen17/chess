@@ -19,27 +19,32 @@ class GameServiceTest {
     static GameService gameService;
     static GameDAO gameDAO;
     static AuthDAO authDAO;
+    static UserDAO userDAO;
     static GameData testGame;
     static AuthData testAuth;
+    static ClearService clearService;
 
 
     @BeforeAll
     static void beforeAll() throws DataAccessException {
         gameDAO = new MemoryGameDAO();
         authDAO = new MemoryAuthDAO();
+        userDAO = new MemoryUserDAO();
         gameService = new GameService(gameDAO, authDAO);
+        clearService = new ClearService(userDAO, gameDAO, authDAO);
+    }
+
+    @BeforeEach
+    void setup() throws DataAccessException {
+        clearService.clearApp();
+        testGame = new GameData(1, "whitePlayer", "blackPlayer", "testGame", new ChessGame());
         testAuth = new AuthData("testToken", "testUser");
         authDAO.createAuth(testAuth);
     }
 
-    @BeforeEach
-    void setup() {
-        testGame = new GameData(1234, "whitePlayer", "blackPlayer", "testGame", new ChessGame());
-    }
-
     @Test
     void listGames() throws DataAccessException {
-        GameData testGame2 = new GameData(4321, "whitePlayer", "blackPlayer", "testGame", new ChessGame());
+        GameData testGame2 = new GameData(2, "whitePlayer", "blackPlayer", "testGame", new ChessGame());
         gameService.createGame(testGame, testAuth);
         gameService.createGame(testGame2, testAuth);
         HashSet<GameData> expected = new HashSet<>();
@@ -57,7 +62,7 @@ class GameServiceTest {
     @Test
     void createGame() throws DataAccessException {
         int gameID = gameService.createGame(testGame, testAuth);
-        Assertions.assertEquals(1234, gameID);
+        Assertions.assertEquals(1, gameID);
     }
 
     @Test
@@ -69,10 +74,10 @@ class GameServiceTest {
 
     @Test
     void joinGame() throws DataAccessException {
-        testGame = new GameData(1234, "whitePlayer", null, "testGame", new ChessGame());
+        testGame = new GameData(1, "whitePlayer", null, "testGame", new ChessGame());
         gameService.createGame(testGame, testAuth);
         gameService.joinGame(testGame,testAuth, ChessGame.TeamColor.BLACK);
-        GameData expected = new GameData(1234, "whitePlayer", testAuth.getUsername(), "testGame", testGame.getGame());
+        GameData expected = new GameData(1, "whitePlayer", testAuth.getUsername(), "testGame", testGame.getGame());
         Assertions.assertEquals(expected, gameDAO.getGame(testGame.getGameID()));
     }
 

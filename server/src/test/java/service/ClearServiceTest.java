@@ -20,10 +20,6 @@ class ClearServiceTest {
     private AuthDAO authDAO;
     private ClearService clearService;
 
-    @Test
-    void clearApp() {
-    }
-
     @BeforeEach
     void setUp() throws DataAccessException {
         userDAO = new MemoryUserDAO();

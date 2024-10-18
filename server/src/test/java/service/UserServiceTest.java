@@ -15,18 +15,24 @@ class UserServiceTest {
     static UserService userService;
     static UserDAO userDAO;
     static AuthDAO authDAO;
+    static GameDAO gameDAO;
     UserData testUser;
+    static ClearService clearService;
+
 
     @BeforeAll
     static void beforeAll() {
         userDAO = new MemoryUserDAO();
         authDAO = new MemoryAuthDAO();
+        gameDAO = new MemoryGameDAO();
         userService = new UserService(userDAO, authDAO);
+        clearService = new ClearService(userDAO, gameDAO, authDAO);
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws DataAccessException {
         testUser = new UserData("User", "test123", "test@gmail.com");
+        clearService.clearApp();
     }
 
     @Test
