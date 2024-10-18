@@ -21,16 +21,13 @@ public class UserService {
     public AuthData register(UserData user) throws DataAccessException {
         try {
             UserData findUser = userDAO.getUserData(user.getUsername());
-        }
-        //user does not exist
-        catch(DataAccessException e) {
+        } catch(DataAccessException e) {
             userDAO.createUser(user);
             String authToken = UUID.randomUUID().toString();
             AuthData authData = new AuthData(authToken, user.getUsername());
             authDAO.createAuth(authData);
             return authData;
         }
-        //user already exists
         throw new DataAccessException("User already exists");
     }
 
@@ -40,8 +37,7 @@ public class UserService {
             if(!findUser.getPassword().equals(userData.getPassword())){
                 throw new DataAccessException("Incorrect password");
             }
-        } //user does not exist
-        catch (DataAccessException e) {
+        } catch (DataAccessException e) {
             throw new DataAccessException("User does not exist");
         }
         String authToken = UUID.randomUUID().toString();
@@ -53,8 +49,7 @@ public class UserService {
     public void logout(AuthData authData) throws DataAccessException {
         try {
             authDAO.getAuth(authData.getAuthToken());
-        } //unauthorized
-        catch (DataAccessException e) {
+        } catch (DataAccessException e) {
             throw new DataAccessException("Error: Unauthorized");
         }
         authDAO.deleteAuth(authData.getAuthToken());

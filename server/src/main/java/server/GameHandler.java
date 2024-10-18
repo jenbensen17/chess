@@ -1,17 +1,13 @@
 package server;
 
 import chess.ChessGame;
-import chess.GameState;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import model.*;
 import service.GameService;
 import spark.Request;
 import spark.Response;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.UUID;
 
 public class GameHandler {
 
