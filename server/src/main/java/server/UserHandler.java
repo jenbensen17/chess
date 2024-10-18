@@ -50,4 +50,17 @@ public class UserHandler {
         var json = serializer.toJson(loginResult);
         return json;
     }
+
+    public Object logout(Request req, Response res) throws DataAccessException {
+        var serializer = new Gson();
+        LogoutRequest logoutRequest = new LogoutRequest(req.headers("authorization"));
+        try {
+            userService.logout(new AuthData(logoutRequest.authToken(), null));
+        } catch (DataAccessException e) {
+            res.status(401);
+            return "{ \"message\": \"Error: unauthorized\" }";
+        }
+        res.status(200);
+        return "{}";
+    }
 }
