@@ -68,5 +68,11 @@ public class SQLUserTest {
         Assertions.assertEquals(testUser.getEmail(), dbUserResult.getEmail());
     }
 
-
+    @Test
+    void getUserFail() throws DataAccessException {
+        userDAO.createUser(testUser);
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            userDAO.getUserData("randomUsername");
+        });
+    }
 }
