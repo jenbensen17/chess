@@ -54,4 +54,20 @@ public class SQLAuthTest {
             authDAO.createAuth(testAuth);
         });
     }
+
+    @Test
+    void getAuth() throws DataAccessException, SQLException {
+        authDAO.createAuth(testAuth);
+        AuthData authResult = authDAO.getAuth(testAuth.getAuthToken());
+        Assertions.assertEquals(testAuth.getUsername(), authResult.getUsername());
+        Assertions.assertEquals(testAuth.getAuthToken(), authResult.getAuthToken());
+    }
+
+    @Test
+    void getAuthFail() throws DataAccessException, SQLException {
+        authDAO.createAuth(testAuth);
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            authDAO.getAuth("invalid auth token");
+        });
+    }
 }
