@@ -20,9 +20,13 @@ public class Server {
     GameHandler gameHandler;
 
     public Server() {
-        userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
-        gameDAO = new MemoryGameDAO();
+        try {
+            userDAO = new SQLUserDAO();
+            authDAO = new SQLAuthDAO();
+            gameDAO = new SQLGameDAO();
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
         userService = new UserService(userDAO, authDAO);
         userHandler = new UserHandler(userService);
         gameService = new GameService(gameDAO, authDAO);
