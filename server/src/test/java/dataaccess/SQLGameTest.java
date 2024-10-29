@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 
 public class SQLGameTest {
 
@@ -103,6 +104,23 @@ public class SQLGameTest {
         gameDAO.createGame(testGame);
         Assertions.assertThrows(DataAccessException.class, () -> {
             gameDAO.updateGame(100, ChessGame.TeamColor.BLACK, new AuthData("testToken","newBlackUsername"));
+        });
+    }
+
+    @Test
+    void listGames() throws DataAccessException {
+        gameDAO.createGame(testGame);
+        GameData secondGame = new GameData(2,"white", "black", "testGame", new ChessGame());
+        gameDAO.createGame(secondGame);
+        HashSet<GameData> dbGameList = gameDAO.listGames();
+        Assertions.assertTrue(dbGameList.contains(testGame));
+        Assertions.assertTrue(dbGameList.contains(secondGame));
+    }
+
+    @Test
+    void listGamesFail() throws DataAccessException {
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            gameDAO.listGames();
         });
     }
 }

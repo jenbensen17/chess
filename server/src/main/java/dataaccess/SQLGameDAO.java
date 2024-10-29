@@ -110,7 +110,28 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public HashSet<GameData> listGames() throws DataAccessException {
-        return null;
+        HashSet<GameData> games = new HashSet<>();
+        try(var conn = DatabaseManager.getConnection()) {
+            try(var preparedStatement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game_state FROM games")) {
+                try(var results = preparedStatement.executeQuery()) {
+                    if(results.getInt("game_id") != 0) {
+                        throw new DataAccessException("Unable to list games");
+                    }
+                    while(results.next()) {
+                        var gameID = results.getInt("game_id");
+                        var whiteUsername = results.getString("white_username");
+                        var blackUsername = results.getString("black_username");
+                        var gameName = results.getString("game_name");
+                        var json = results.getString("game_state");
+                        var chessGame = new Gson().fromJson(json, ChessGame.class);
+                        games.add(new GameData(gameID, whiteUsername, blackUsername, gameName, chessGame));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Unable to list games");
+        }
+        return games;
     }
 
     @Override
