@@ -75,4 +75,13 @@ public class SQLUserTest {
             userDAO.getUserData("randomUsername");
         });
     }
+
+    @Test
+    void removeUsers() throws DataAccessException {
+        userDAO.createUser(testUser);
+        userDAO.removeUsers();
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            userDAO.getUserData(testUser.getUsername());
+        });
+    }
 }
