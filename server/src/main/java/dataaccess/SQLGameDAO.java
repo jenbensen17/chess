@@ -114,10 +114,9 @@ public class SQLGameDAO implements GameDAO {
         try(var conn = DatabaseManager.getConnection()) {
             try(var preparedStatement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game_state FROM games")) {
                 try(var results = preparedStatement.executeQuery()) {
-                    if(results.getInt("game_id") != 0) {
-                        throw new DataAccessException("Unable to list games");
-                    }
+                    boolean gamesInList = false;
                     while(results.next()) {
+                        gamesInList = true;
                         var gameID = results.getInt("game_id");
                         var whiteUsername = results.getString("white_username");
                         var blackUsername = results.getString("black_username");
@@ -125,6 +124,9 @@ public class SQLGameDAO implements GameDAO {
                         var json = results.getString("game_state");
                         var chessGame = new Gson().fromJson(json, ChessGame.class);
                         games.add(new GameData(gameID, whiteUsername, blackUsername, gameName, chessGame));
+                    }
+                    if(!gamesInList) {
+                        throw new DataAccessException("Unable to list games");
                     }
                 }
             }
