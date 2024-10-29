@@ -123,4 +123,13 @@ public class SQLGameTest {
             gameDAO.listGames();
         });
     }
+
+    @Test
+    void removeGames() throws DataAccessException {
+        gameDAO.createGame(testGame);
+        gameDAO.removeGames();
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            gameDAO.getGame(testGame.getGameID());
+        });
+    }
 }
