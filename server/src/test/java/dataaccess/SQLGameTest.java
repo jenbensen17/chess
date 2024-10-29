@@ -2,6 +2,7 @@ package dataaccess;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import model.AuthData;
 import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
@@ -86,6 +87,22 @@ public class SQLGameTest {
         gameDAO.createGame(testGame);
         Assertions.assertThrows(DataAccessException.class, () -> {
             gameDAO.getGame(100);
+        });
+    }
+
+    @Test
+    void updateGame() throws DataAccessException {
+        gameDAO.createGame(testGame);
+        gameDAO.updateGame(testGame.getGameID(), ChessGame.TeamColor.BLACK, new AuthData("testToken","newBlackUsername"));
+        GameData game = gameDAO.getGame(testGame.getGameID());
+        Assertions.assertEquals(game.getBlackUsername(), "newBlackUsername");
+    }
+
+    @Test
+    void updateGameFail() throws DataAccessException {
+        gameDAO.createGame(testGame);
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            gameDAO.updateGame(100, ChessGame.TeamColor.BLACK, new AuthData("testToken","newBlackUsername"));
         });
     }
 }

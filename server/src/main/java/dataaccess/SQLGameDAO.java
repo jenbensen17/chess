@@ -88,7 +88,24 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public void updateGame(int gameID, ChessGame.TeamColor playerColor, AuthData authData) throws DataAccessException {
-
+        try(var conn = DatabaseManager.getConnection()) {
+            String colorToUpdate;
+            if(playerColor.equals(ChessGame.TeamColor.BLACK)) {
+                colorToUpdate = "black_username=?";
+            } else {
+                colorToUpdate = "white_username=?";
+            }
+            try(var preparedStatement = conn.prepareStatement("UPDATE games SET "+colorToUpdate+" WHERE game_id = ?")) {
+                preparedStatement.setString(1,authData.getUsername());
+                preparedStatement.setInt(2, gameID);
+                int status = preparedStatement.executeUpdate();
+                if(status == 0) {
+                    throw new DataAccessException("Unable to update game");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Unable to update game");
+        }
     }
 
     @Override
