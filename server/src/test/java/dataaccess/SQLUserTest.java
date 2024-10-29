@@ -4,6 +4,8 @@ import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.SQLException;
 
 public class SQLUserTest {
@@ -47,7 +49,7 @@ public class SQLUserTest {
             throw new RuntimeException(e);
         }
         Assertions.assertEquals(testUser.getUsername(), dbUserName);
-        Assertions.assertEquals(testUser.getPassword(), dbPassword);
+        Assertions.assertTrue(BCrypt.checkpw(testUser.getPassword(), dbPassword));
         Assertions.assertEquals(testUser.getEmail(), dbEmail);
     }
 
@@ -64,7 +66,7 @@ public class SQLUserTest {
         userDAO.createUser(testUser);
         UserData dbUserResult = userDAO.getUserData(testUser.getUsername());
         Assertions.assertEquals(testUser.getUsername(), dbUserResult.getUsername());
-        Assertions.assertEquals(testUser.getPassword(), dbUserResult.getPassword());
+        Assertions.assertTrue(BCrypt.checkpw(testUser.getPassword(), dbUserResult.getPassword()));
         Assertions.assertEquals(testUser.getEmail(), dbUserResult.getEmail());
     }
 

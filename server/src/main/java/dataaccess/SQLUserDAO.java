@@ -2,6 +2,7 @@ package dataaccess;
 
 import model.UserData;
 import com.google.gson.Gson;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.xml.crypto.Data;
 import java.sql.SQLException;
@@ -59,7 +60,8 @@ public class SQLUserDAO implements UserDAO {
         try(var conn = DatabaseManager.getConnection()) {
             try(var preparedStatement = conn.prepareStatement("INSERT INTO users (username, password, email) VALUES (?, ?, ?)")) {
                 preparedStatement.setString(1, user.getUsername());
-                preparedStatement.setString(2, user.getPassword());
+                String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+                preparedStatement.setString(2, hashedPassword);
                 preparedStatement.setString(3, user.getEmail());
                 preparedStatement.executeUpdate();
             }
