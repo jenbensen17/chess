@@ -17,7 +17,7 @@ public class SQLGameDAO implements GameDAO {
     private final String [] createStatements = {
         """
         CREATE TABLE IF NOT EXISTS games (
-        game_id INT NOT NULL AUTO_INCREMENT UNIQUE,
+        game_id INT NOT NULL UNIQUE,
         white_username VARCHAR(255) NOT NULL,
         black_username VARCHAR(255) NOT NULL,
         game_name VARCHAR(255) NOT NULL,
@@ -42,7 +42,30 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public GameData getGame(int gameID) throws DataAccessException {
-        return null;
+        int dbGameId;
+        String dbWhiteUsername;
+        String dbBlackUsername;
+        String dbGameName;
+        ChessGame dbGame;
+        try(var conn = DatabaseManager.getConnection()) {
+            try (var statement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game_state FROM games WHERE game_id = ?")) {
+                statement.setInt(1, gameID);
+                try (var results = statement.executeQuery()) {
+                    results.next();
+                    dbGameId = results.getInt("game_id");
+                    dbWhiteUsername = results.getString("white_username");
+                    dbBlackUsername = results.getString("black_username");
+                    dbGameName = results.getString("game_name");
+
+                    var json = results.getString("game_state");
+                    dbGame = new Gson().fromJson(json, ChessGame.class);
+
+                    return new GameData(dbGameId, dbWhiteUsername, dbBlackUsername, dbGameName, dbGame);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Invalid game ID");
+        }
     }
 
     @Override

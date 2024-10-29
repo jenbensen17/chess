@@ -50,7 +50,6 @@ public class SQLGameTest {
 
                     var json = results.getString("game_state");
                     dbGame = new Gson().fromJson(json, ChessGame.class);
-
                 }
             }
         } catch (SQLException e) {
@@ -68,6 +67,25 @@ public class SQLGameTest {
         gameDAO.createGame(testGame);
         Assertions.assertThrows(DataAccessException.class, () -> {
             gameDAO.createGame(testGame);
+        });
+    }
+
+    @Test
+    void getGame() throws DataAccessException {
+        gameDAO.createGame(testGame);
+        GameData game = gameDAO.getGame(testGame.getGameID());
+        Assertions.assertEquals(testGame.getGameID(), game.getGameID());
+        Assertions.assertEquals(testGame.getWhiteUsername(), game.getWhiteUsername());
+        Assertions.assertEquals(testGame.getBlackUsername(), game.getBlackUsername());
+        Assertions.assertEquals(testGame.getGameName(), game.getGameName());
+        Assertions.assertEquals(testGame.getGame(), game.getGame());
+    }
+
+    @Test
+    void getGameFail() throws DataAccessException {
+        gameDAO.createGame(testGame);
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            gameDAO.getGame(100);
         });
     }
 }
