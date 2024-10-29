@@ -3,6 +3,7 @@ package dataaccess;
 import model.AuthData;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SQLAuthDAO implements AuthDAO {
 
@@ -36,7 +37,15 @@ public class SQLAuthDAO implements AuthDAO {
 
     @Override
     public void createAuth(AuthData authData) throws DataAccessException {
-
+        try(var conn = DatabaseManager.getConnection()) {
+            try(var preparedStatement = conn.prepareStatement("INSERT INTO auth (auth_token, username) VALUES(?,?)")) {
+                preparedStatement.setString(1, authData.getAuthToken());
+                preparedStatement.setString(2, authData.getUsername());
+                preparedStatement.executeUpdate();
+            }
+        } catch (Exception e) {
+            throw new DataAccessException("Error");
+        }
     }
 
     @Override
