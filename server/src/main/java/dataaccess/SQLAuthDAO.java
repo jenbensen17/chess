@@ -82,6 +82,11 @@ public class SQLAuthDAO implements AuthDAO {
 
     @Override
     public void removeAuthTokens() {
-
+        try(var conn = DatabaseManager.getConnection()) {
+            try(var preparedStatement = conn.prepareStatement("TRUNCATE auth")) {
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException | DataAccessException ignored) {
+        }
     }
 }

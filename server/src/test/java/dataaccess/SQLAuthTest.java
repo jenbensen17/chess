@@ -86,4 +86,13 @@ public class SQLAuthTest {
             authDAO.deleteAuth("invalidToken");
         });
     }
+
+    @Test
+    void removeAuth() throws DataAccessException {
+        authDAO.createAuth(testAuth);
+        authDAO.removeAuthTokens();
+        Assertions.assertThrows(DataAccessException.class, () -> {
+            authDAO.getAuth(testAuth.getAuthToken());
+        });
+    }
 }
