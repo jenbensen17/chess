@@ -2,13 +2,8 @@ package dataaccess;
 
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.ClearService;
-import service.UserService;
-
-import javax.xml.crypto.Data;
 import java.sql.SQLException;
 
 public class SQLUserTest {
@@ -63,4 +58,15 @@ public class SQLUserTest {
             userDAO.createUser(testUser);
         });
     }
+
+    @Test
+    void getUser() throws DataAccessException {
+        userDAO.createUser(testUser);
+        UserData dbUserResult = userDAO.getUserData(testUser.getUsername());
+        Assertions.assertEquals(testUser.getUsername(), dbUserResult.getUsername());
+        Assertions.assertEquals(testUser.getPassword(), dbUserResult.getPassword());
+        Assertions.assertEquals(testUser.getEmail(), dbUserResult.getEmail());
+    }
+
+
 }
