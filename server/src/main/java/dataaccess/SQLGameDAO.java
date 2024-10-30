@@ -102,7 +102,7 @@ public class SQLGameDAO implements GameDAO {
             } else {
                 colorToUpdate = "white_username=?";
             }
-            try(var preparedStatement = conn.prepareStatement("UPDATE game SET "+colorToUpdate+" WHERE game_id = ?")) {
+            try(var preparedStatement = conn.prepareStatement("UPDATE gameTable SET "+colorToUpdate+" WHERE game_id = ?")) {
                 preparedStatement.setString(1,authData.getUsername());
                 preparedStatement.setInt(2, gameID);
                 int status = preparedStatement.executeUpdate();
@@ -133,7 +133,7 @@ public class SQLGameDAO implements GameDAO {
                         games.add(new GameData(gameID, whiteUsername, blackUsername, gameName, chessGame));
                     }
                     if(!gamesInList) {
-                        throw new DataAccessException("Unable to list games");
+                        return games;
                     }
                 }
             }
@@ -146,7 +146,7 @@ public class SQLGameDAO implements GameDAO {
     @Override
     public void removeGames() {
         try(var conn = DatabaseManager.getConnection()) {
-            try(var preparedStatement = conn.prepareStatement("TRUNCATE game")) {
+            try(var preparedStatement = conn.prepareStatement("TRUNCATE gameTable")) {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException | DataAccessException ignored) {
