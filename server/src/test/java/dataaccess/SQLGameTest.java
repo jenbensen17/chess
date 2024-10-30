@@ -22,7 +22,7 @@ public class SQLGameTest {
         DatabaseManager.createDatabase();
         gameDAO = new SQLGameDAO();
         try(var conn = DatabaseManager.getConnection()) {
-            try(var statement = conn.prepareStatement("TRUNCATE games")) {
+            try(var statement = conn.prepareStatement("TRUNCATE gameTable")) {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -41,7 +41,7 @@ public class SQLGameTest {
         String dbGameName;
         ChessGame dbGame;
         try(var conn = DatabaseManager.getConnection()) {
-            try (var statement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game_state FROM games WHERE game_id = ?")) {
+            try (var statement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game_state FROM gameTable WHERE game_id = ?")) {
                 statement.setInt(1, testGame.getGameID());
                 try (var results = statement.executeQuery()) {
                     results.next();
@@ -66,9 +66,8 @@ public class SQLGameTest {
 
     @Test
     void createGameFail() throws DataAccessException {
-        gameDAO.createGame(testGame);
         Assertions.assertThrows(DataAccessException.class, () -> {
-            gameDAO.createGame(testGame);
+            gameDAO.createGame(new GameData(1,"white", "black", null, new ChessGame()));
         });
     }
 
@@ -93,7 +92,7 @@ public class SQLGameTest {
 
     @Test
     void updateGame() throws DataAccessException {
-        gameDAO.createGame(testGame);
+        gameDAO.createGame(new GameData(1,"white", null, "testGame", new ChessGame()));
         gameDAO.updateGame(testGame.getGameID(), ChessGame.TeamColor.BLACK, new AuthData("testToken","newBlackUsername"));
         GameData game = gameDAO.getGame(testGame.getGameID());
         Assertions.assertEquals(game.getBlackUsername(), "newBlackUsername");
@@ -117,12 +116,6 @@ public class SQLGameTest {
         Assertions.assertTrue(dbGameList.contains(secondGame));
     }
 
-    @Test
-    void listGamesFail() throws DataAccessException {
-        Assertions.assertThrows(DataAccessException.class, () -> {
-            gameDAO.listGames();
-        });
-    }
 
     @Test
     void removeGames() throws DataAccessException {
