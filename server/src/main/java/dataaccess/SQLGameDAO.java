@@ -48,7 +48,8 @@ public class SQLGameDAO implements GameDAO {
         String dbGameName;
         ChessGame dbGame;
         try (var conn = DatabaseManager.getConnection()) {
-            try (var statement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game_state FROM gameTable WHERE game_id = ?")) {
+            try (var statement = conn.prepareStatement("SELECT game_id, white_username, " +
+                    "black_username, game_name, game_state FROM gameTable WHERE game_id = ?")) {
                 statement.setInt(1, gameID);
                 try (var results = statement.executeQuery()) {
                     results.next();
@@ -71,7 +72,9 @@ public class SQLGameDAO implements GameDAO {
     @Override
     public void createGame(GameData gameData) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("INSERT INTO gameTable (white_username, black_username, game_name, game_state) VALUES (?, ?, ?, ?)")) {
+            try (var preparedStatement = conn.prepareStatement("INSERT INTO gameTable " +
+                    "(white_username, black_username, game_name, game_state) " +
+                    "VALUES (?, ?, ?, ?)")) {
                 if (gameData.getWhiteUsername() != null) {
                     preparedStatement.setString(1, gameData.getWhiteUsername());
                 } else {
@@ -131,7 +134,8 @@ public class SQLGameDAO implements GameDAO {
     public HashSet<GameData> listGames() throws DataAccessException {
         HashSet<GameData> games = new HashSet<>();
         try (var conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game_state FROM gameTable")) {
+            try (var preparedStatement = conn.prepareStatement("SELECT game_id, " +
+                    "white_username, black_username, game_name, game_state FROM gameTable")) {
                 try (var results = preparedStatement.executeQuery()) {
                     boolean gamesInList = false;
                     while (results.next()) {
