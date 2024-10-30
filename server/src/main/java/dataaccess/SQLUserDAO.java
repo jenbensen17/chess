@@ -13,7 +13,7 @@ public class SQLUserDAO implements UserDAO {
         configureDatabase();
     }
 
-    private final String [] createStatements = {
+    private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS users (
             `user_id` INT NOT NULL AUTO_INCREMENT,
@@ -27,13 +27,13 @@ public class SQLUserDAO implements UserDAO {
 
     private void configureDatabase() throws DataAccessException {
         DatabaseManager.createDatabase();
-        try(var conn = DatabaseManager.getConnection()) {
-            for(var statement: createStatements) {
-                try(var preparedStatement = conn.prepareStatement(statement)) {
+        try (var conn = DatabaseManager.getConnection()) {
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
                 }
             }
-        } catch( SQLException e) {
+        } catch (SQLException e) {
             throw new DataAccessException("Unable to configure database");
         }
     }
@@ -43,7 +43,7 @@ public class SQLUserDAO implements UserDAO {
         try (var conn = DatabaseManager.getConnection()) {
             var preparedStatement = conn.prepareStatement("SELECT username, password, email FROM users WHERE username = ?");
             preparedStatement.setString(1, username);
-            try(var result = preparedStatement.executeQuery()) {
+            try (var result = preparedStatement.executeQuery()) {
                 result.next();
                 var resultUserName = result.getString("username");
                 var resultPassword = result.getString("password");
@@ -57,8 +57,8 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public void createUser(UserData user) throws DataAccessException {
-        try(var conn = DatabaseManager.getConnection()) {
-            try(var preparedStatement = conn.prepareStatement("INSERT INTO users (username, password, email) VALUES (?, ?, ?)")) {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("INSERT INTO users (username, password, email) VALUES (?, ?, ?)")) {
                 preparedStatement.setString(1, user.getUsername());
                 String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
                 preparedStatement.setString(2, hashedPassword);
@@ -73,8 +73,8 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public void removeUsers() {
-        try(var conn = DatabaseManager.getConnection()) {
-            try(var preparedStatement = conn.prepareStatement("TRUNCATE users")) {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("TRUNCATE users")) {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException | DataAccessException ignored) {

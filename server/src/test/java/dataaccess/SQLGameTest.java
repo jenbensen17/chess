@@ -21,15 +21,15 @@ public class SQLGameTest {
     void setUp() throws DataAccessException {
         DatabaseManager.createDatabase();
         gameDAO = new SQLGameDAO();
-        try(var conn = DatabaseManager.getConnection()) {
-            try(var statement = conn.prepareStatement("TRUNCATE gameTable")) {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var statement = conn.prepareStatement("TRUNCATE gameTable")) {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        testGame = new GameData(1,"white", "black", "testGame", new ChessGame());
+        testGame = new GameData(1, "white", "black", "testGame", new ChessGame());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class SQLGameTest {
         String dbBlackUsername;
         String dbGameName;
         ChessGame dbGame;
-        try(var conn = DatabaseManager.getConnection()) {
+        try (var conn = DatabaseManager.getConnection()) {
             try (var statement = conn.prepareStatement("SELECT game_id, white_username, black_username, game_name, game_state FROM gameTable WHERE game_id = ?")) {
                 statement.setInt(1, testGame.getGameID());
                 try (var results = statement.executeQuery()) {
@@ -67,7 +67,7 @@ public class SQLGameTest {
     @Test
     void createGameFail() throws DataAccessException {
         Assertions.assertThrows(DataAccessException.class, () -> {
-            gameDAO.createGame(new GameData(1,"white", "black", null, new ChessGame()));
+            gameDAO.createGame(new GameData(1, "white", "black", null, new ChessGame()));
         });
     }
 
@@ -92,8 +92,8 @@ public class SQLGameTest {
 
     @Test
     void updateGame() throws DataAccessException {
-        gameDAO.createGame(new GameData(1,"white", null, "testGame", new ChessGame()));
-        gameDAO.updateGame(testGame.getGameID(), ChessGame.TeamColor.BLACK, new AuthData("testToken","newBlackUsername"));
+        gameDAO.createGame(new GameData(1, "white", null, "testGame", new ChessGame()));
+        gameDAO.updateGame(testGame.getGameID(), ChessGame.TeamColor.BLACK, new AuthData("testToken", "newBlackUsername"));
         GameData game = gameDAO.getGame(testGame.getGameID());
         Assertions.assertEquals(game.getBlackUsername(), "newBlackUsername");
     }
@@ -102,14 +102,14 @@ public class SQLGameTest {
     void updateGameFail() throws DataAccessException {
         gameDAO.createGame(testGame);
         Assertions.assertThrows(DataAccessException.class, () -> {
-            gameDAO.updateGame(100, ChessGame.TeamColor.BLACK, new AuthData("testToken","newBlackUsername"));
+            gameDAO.updateGame(100, ChessGame.TeamColor.BLACK, new AuthData("testToken", "newBlackUsername"));
         });
     }
 
     @Test
     void listGames() throws DataAccessException {
         gameDAO.createGame(testGame);
-        GameData secondGame = new GameData(2,"white", "black", "testGame", new ChessGame());
+        GameData secondGame = new GameData(2, "white", "black", "testGame", new ChessGame());
         gameDAO.createGame(secondGame);
         HashSet<GameData> dbGameList = gameDAO.listGames();
         Assertions.assertTrue(dbGameList.contains(testGame));

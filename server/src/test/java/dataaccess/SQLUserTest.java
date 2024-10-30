@@ -17,15 +17,15 @@ public class SQLUserTest {
     void setUp() throws DataAccessException {
         DatabaseManager.createDatabase();
         userDAO = new SQLUserDAO();
-        try(var conn = DatabaseManager.getConnection()) {
-            try(var statement = conn.prepareStatement("TRUNCATE users")) {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var statement = conn.prepareStatement("TRUNCATE users")) {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        testUser = new UserData("testUser", "1234","test@gmail.com");
+        testUser = new UserData("testUser", "1234", "test@gmail.com");
     }
 
     @Test
@@ -35,7 +35,7 @@ public class SQLUserTest {
         String dbPassword;
         String dbEmail;
 
-        try(var conn = DatabaseManager.getConnection()) {
+        try (var conn = DatabaseManager.getConnection()) {
             try (var statement = conn.prepareStatement("SELECT username, password, email FROM users WHERE username = ?")) {
                 statement.setString(1, testUser.getUsername());
                 try (var results = statement.executeQuery()) {

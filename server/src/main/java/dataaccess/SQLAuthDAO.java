@@ -11,7 +11,7 @@ public class SQLAuthDAO implements AuthDAO {
         configureDatabase();
     }
 
-    private final String [] createStatements = {
+    private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS auth (
             token_id INT NOT NULL AUTO_INCREMENT,
@@ -24,21 +24,21 @@ public class SQLAuthDAO implements AuthDAO {
 
     private void configureDatabase() throws DataAccessException {
         DatabaseManager.createDatabase();
-        try(var conn = DatabaseManager.getConnection()) {
-            for(var statement: createStatements) {
-                try(var preparedStatement = conn.prepareStatement(statement)) {
+        try (var conn = DatabaseManager.getConnection()) {
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
                 }
             }
-        } catch( SQLException e) {
+        } catch (SQLException e) {
             throw new DataAccessException("Unable to configure database");
         }
     }
 
     @Override
     public void createAuth(AuthData authData) throws DataAccessException {
-        try(var conn = DatabaseManager.getConnection()) {
-            try(var preparedStatement = conn.prepareStatement("INSERT INTO auth (auth_token, username) VALUES(?,?)")) {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("INSERT INTO auth (auth_token, username) VALUES(?,?)")) {
                 preparedStatement.setString(1, authData.getAuthToken());
                 preparedStatement.setString(2, authData.getUsername());
                 preparedStatement.executeUpdate();
@@ -50,8 +50,8 @@ public class SQLAuthDAO implements AuthDAO {
 
     @Override
     public AuthData getAuth(String authToken) throws DataAccessException {
-        try(var conn = DatabaseManager.getConnection()) {
-            try(var preparedStatement = conn.prepareStatement("SELECT username, auth_token FROM auth WHERE auth_token = ?")) {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT username, auth_token FROM auth WHERE auth_token = ?")) {
                 preparedStatement.setString(1, authToken);
                 try (var resultSet = preparedStatement.executeQuery()) {
                     resultSet.next();
@@ -67,11 +67,11 @@ public class SQLAuthDAO implements AuthDAO {
 
     @Override
     public void deleteAuth(String authToken) throws DataAccessException {
-        try(var conn = DatabaseManager.getConnection()) {
-            try(var preparedStatement = conn.prepareStatement("DELETE FROM auth WHERE auth_token=?", Statement.RETURN_GENERATED_KEYS)) {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("DELETE FROM auth WHERE auth_token=?", Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, authToken);
                 int status = preparedStatement.executeUpdate();
-                if(status != 1) {
+                if (status != 1) {
                     throw new DataAccessException("Error");
                 }
             }
@@ -82,8 +82,8 @@ public class SQLAuthDAO implements AuthDAO {
 
     @Override
     public void removeAuthTokens() {
-        try(var conn = DatabaseManager.getConnection()) {
-            try(var preparedStatement = conn.prepareStatement("TRUNCATE auth")) {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("TRUNCATE auth")) {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException | DataAccessException ignored) {

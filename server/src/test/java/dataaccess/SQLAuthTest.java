@@ -16,8 +16,8 @@ public class SQLAuthTest {
     void setUp() throws DataAccessException, SQLException {
         DatabaseManager.createDatabase();
         authDAO = new SQLAuthDAO();
-        try(var conn = DatabaseManager.getConnection()) {
-            try(var statement = conn.prepareStatement("TRUNCATE auth")) {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var statement = conn.prepareStatement("TRUNCATE auth")) {
                 statement.executeUpdate();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -32,8 +32,8 @@ public class SQLAuthTest {
         String dbUserName;
         String dbToken;
 
-        try(var conn = DatabaseManager.getConnection()) {
-            try(var preparedStatement = conn.prepareStatement("SELECT username, auth_token FROM auth WHERE username = ?")) {
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement("SELECT username, auth_token FROM auth WHERE username = ?")) {
                 preparedStatement.setString(1, testAuth.getUsername());
                 try (var resultSet = preparedStatement.executeQuery()) {
                     resultSet.next();

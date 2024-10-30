@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 class ClearServiceTest {
 
     private UserDAO userDAO;
@@ -27,7 +28,7 @@ class ClearServiceTest {
         gameDAO = new MemoryGameDAO();
         gameDAO.createGame(new GameData(123, "white", "black", "test", new ChessGame()));
         authDAO = new MemoryAuthDAO();
-        authDAO.createAuth(new AuthData("4567","test"));
+        authDAO.createAuth(new AuthData("4567", "test"));
         clearService = new ClearService(userDAO, gameDAO, authDAO);
     }
 
