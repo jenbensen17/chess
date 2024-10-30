@@ -35,7 +35,7 @@ public class GameService {
             throw new DataAccessException("Error: Unauthorized");
         }
         gameDAO.createGame(gameData);
-        gameData = gameDAO.getGame(gameDAO.listGames().size());
+        gameData = gameDAO.getGame(gameDAO.listGames().size()-1);
         return gameData.getGameID();
     }
 
