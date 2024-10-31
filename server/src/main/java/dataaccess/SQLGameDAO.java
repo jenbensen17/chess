@@ -111,10 +111,7 @@ public class SQLGameDAO implements GameDAO {
                     try (var preparedStatement = conn.prepareStatement("UPDATE gameTable SET " + colorToUpdate + " WHERE game_id = ?")) {
                         preparedStatement.setString(1, authData.getUsername());
                         preparedStatement.setInt(2, gameID);
-                        int status = preparedStatement.executeUpdate();
-                        if (status == 0) {
-                            throw new DataAccessException("Unable to update game");
-                        }
+                        preparedStatement.executeUpdate();
                     }
                 }
             }
