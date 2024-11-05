@@ -20,8 +20,8 @@ public class ServerFacade {
     }
 
     public AuthData register(String username, String password, String email) {
-        var body = Map.of("username", username, "password", password, "email", email);
-        Map resp = makeRequest("POST", "/user", body, Map.class);
+        RegisterRequest req = new RegisterRequest(username, password, email);
+        Map resp = makeRequest("POST", "/user", req, Map.class);
         var authToken = (String)resp.get("authToken");
         AuthData authData = new AuthData(authToken, username);
         return authData;
