@@ -59,4 +59,8 @@ public class Server {
         Spark.stop();
         Spark.awaitStop();
     }
+
+    public void clearDB() throws DataAccessException {
+        clearService.clearApp();
+    }
 }
