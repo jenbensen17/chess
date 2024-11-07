@@ -45,4 +45,19 @@ public class ServerFacadeTests {
         });
     }
 
+    @Test
+    public void login() throws Exception {
+        facade.register("player1", "password", "p1@email.com");
+        AuthData authData = facade.login("player1", "password");
+        Assertions.assertTrue(authData.getAuthToken().length() > 10);
+    }
+
+    @Test
+    public void loginFail() throws Exception {
+        facade.register("player1", "password", "p1@email.com");
+        Assertions.assertThrows(Exception.class, () -> {
+            AuthData authData = facade.login("player1", "INCORRECT PASSWORD");
+        });
+    }
+
 }

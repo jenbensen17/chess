@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import model.AuthData;
+import model.LoginRequest;
 import model.RegisterRequest;
 import model.RegisterResult;
 
@@ -22,6 +23,14 @@ public class ServerFacade {
     public AuthData register(String username, String password, String email) {
         RegisterRequest req = new RegisterRequest(username, password, email);
         Map resp = makeRequest("POST", "/user", req, Map.class);
+        var authToken = (String)resp.get("authToken");
+        AuthData authData = new AuthData(authToken, username);
+        return authData;
+    }
+
+    public AuthData login(String username, String password) {
+        LoginRequest req = new LoginRequest(username, password);
+        Map resp = makeRequest("POST", "/session", req, Map.class);
         var authToken = (String)resp.get("authToken");
         AuthData authData = new AuthData(authToken, username);
         return authData;
