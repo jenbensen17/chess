@@ -18,7 +18,7 @@ public class ServerFacade {
     }
 
     public AuthData register(String username, String password, String email) {
-        RegisterRequest req = new RegisterRequest(username, password, email);
+        var req = Map.of("username", username, "password", password, "email", email);
         Map resp = makeRequest("POST", "/user", req, Map.class);
         var authToken = (String)resp.get("authToken");
         AuthData authData = new AuthData(authToken, username);
@@ -26,7 +26,7 @@ public class ServerFacade {
     }
 
     public AuthData login(String username, String password) {
-        LoginRequest req = new LoginRequest(username, password);
+        var req = Map.of("username", username, "password", password);
         Map resp = makeRequest("POST", "/session", req, Map.class);
         var authToken = (String)resp.get("authToken");
         AuthData authData = new AuthData(authToken, username);
@@ -34,8 +34,15 @@ public class ServerFacade {
     }
 
     public void logout(String authToken) {
-        LogoutRequest req = new LogoutRequest(authToken);
+        var req = Map.of("authToken", authToken);
         makeRequest("DELETE", "/session", req, Map.class);
+    }
+
+    public int createGame(String authToken, String gameName) {
+        var req = Map.of("authToken", authToken, "gameName", gameName);
+        Map resp = makeRequest("POST", "/game", req, Map.class);
+        int gameId =  (int)Math.round((Double)resp.get("gameID"));
+        return gameId;
     }
 
     private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) {
@@ -44,8 +51,10 @@ public class ServerFacade {
             HttpURLConnection http = (HttpURLConnection)url.toURL().openConnection();
             http.setRequestMethod(method);
             http.setDoOutput(true);
-            if(method.equals("DELETE")) {
-                writeHeader((LogoutRequest)request, http);
+            if(request != null){
+                if(((Map<?, ?>) request).containsKey("authToken")){
+                    writeHeader((String) ((Map<?, ?>) request).get("authToken"), http);
+                }
             }
             writeBody(request, http);
             http.connect();
@@ -66,8 +75,8 @@ public class ServerFacade {
         }
     }
 
-    private static void writeHeader(LogoutRequest request, HttpURLConnection http) throws IOException {
-        http.addRequestProperty("authorization", request.authToken());
+    private static void writeHeader(String authToken, HttpURLConnection http) throws IOException {
+        http.addRequestProperty("authorization", authToken);
     }
 
     private void throwIfNotSuccessful(HttpURLConnection http) throws IOException {

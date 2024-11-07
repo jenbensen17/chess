@@ -75,4 +75,18 @@ public class ServerFacadeTests {
         });
     }
 
+    @Test
+    public void createGame() throws Exception {
+        AuthData authData = facade.register("player1", "password", "p1@email.com");
+        int gameID = facade.createGame(authData.getAuthToken(), "testGame");
+        Assertions.assertEquals(gameID, 1);
+    }
+
+    @Test
+    public void createGameFail() throws Exception {
+        Assertions.assertThrows(Exception.class, () -> {
+            facade.createGame("invalid", "testGame");
+        });
+    }
+
 }
