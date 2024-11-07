@@ -1,10 +1,7 @@
-package server;
+package client;
 
 import com.google.gson.Gson;
-import model.AuthData;
-import model.LoginRequest;
-import model.RegisterRequest;
-import model.RegisterResult;
+import model.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -36,13 +33,21 @@ public class ServerFacade {
         return authData;
     }
 
-    private <T> T makeRequest(String method, String path, Object reuqest, Class<T> responseClass) {
+    public void logout(String authToken) {
+        LogoutRequest req = new LogoutRequest(authToken);
+        makeRequest("DELETE", "/session", req, Map.class);
+    }
+
+    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass) {
         try{
             URI url = (new URI(serverUrl+path));
             HttpURLConnection http = (HttpURLConnection)url.toURL().openConnection();
             http.setRequestMethod(method);
             http.setDoOutput(true);
-            writeBody(reuqest, http);
+            if(method.equals("DELETE")) {
+                writeHeader((LogoutRequest)request, http);
+            }
+            writeBody(request, http);
             http.connect();
             throwIfNotSuccessful(http);
             return readBody(http, responseClass);
@@ -59,6 +64,10 @@ public class ServerFacade {
                reqBody.write(reqData.getBytes());
             }
         }
+    }
+
+    private static void writeHeader(LogoutRequest request, HttpURLConnection http) throws IOException {
+        http.addRequestProperty("authorization", request.authToken());
     }
 
     private void throwIfNotSuccessful(HttpURLConnection http) throws IOException {

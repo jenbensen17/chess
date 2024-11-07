@@ -1,10 +1,8 @@
 package client;
 
-import dataaccess.DataAccessException;
 import model.AuthData;
 import org.junit.jupiter.api.*;
 import server.Server;
-import server.ServerFacade;
 
 
 public class ServerFacadeTests {
@@ -57,6 +55,23 @@ public class ServerFacadeTests {
         facade.register("player1", "password", "p1@email.com");
         Assertions.assertThrows(Exception.class, () -> {
             AuthData authData = facade.login("player1", "INCORRECT PASSWORD");
+        });
+    }
+
+    @Test
+    public void logout() throws Exception {
+        facade.register("player1", "password", "p1@email.com");
+        AuthData authData = facade.login("player1", "password");
+        facade.logout(authData.getAuthToken());
+        Assertions.assertThrows(Exception.class, () -> {
+            facade.logout(authData.getAuthToken());
+        });
+    }
+
+    @Test
+    public void logoutFail() throws Exception {
+        Assertions.assertThrows(Exception.class, () -> {
+            facade.logout("invalid user auth token");
         });
     }
 
