@@ -2,6 +2,7 @@ package ui;
 
 import client.ServerFacade;
 import client.State;
+import model.AuthData;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -9,9 +10,10 @@ import java.util.Scanner;
 public class PreLoginUI {
     private final ServerFacade server;
     private State state = State.SIGNEDOUT;
-
+    private AuthData authData;
     public PreLoginUI(ServerFacade server) {
         this.server = server;
+        this.authData = null;
     }
 
     public void run() {
@@ -29,7 +31,7 @@ public class PreLoginUI {
             }
         }
         if(state == State.SIGNEDIN) {
-            new PostLoginUI(server).run();
+            new PostLoginUI(server, authData).run();
         }
     }
 
@@ -65,7 +67,7 @@ public class PreLoginUI {
             return "Please enter a valid username, password, and email address";
         } else {
             try {
-                server.register(params[0], params[1], params[2]);
+                authData = server.register(params[0], params[1], params[2]);
                 state = State.SIGNEDIN;
                 return "Successfully registered as "+params[0];
             } catch (Exception e) {
@@ -79,7 +81,7 @@ public class PreLoginUI {
             return "Please enter a valid username and password";
         } else {
             try{
-                server.login(params[0], params[1]);
+                authData = server.login(params[0], params[1]);
                 state = State.SIGNEDIN;
                 return "Successfully logged in as "+params[0];
             } catch (Exception e) {
