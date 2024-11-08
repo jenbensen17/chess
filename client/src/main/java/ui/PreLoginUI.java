@@ -6,18 +6,20 @@ import client.State;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class PreLoginRepl {
+public class PreLoginUI {
     private final ServerFacade server;
     private State state = State.SIGNEDOUT;
 
-    public PreLoginRepl(ServerFacade server) {
+    public PreLoginUI(ServerFacade server) {
         this.server = server;
     }
 
     public void run() {
         Scanner scanner = new Scanner(System.in);
         var result = "";
-        while(!result.toLowerCase().equals("quit")) {
+        var stateString = state == State.SIGNEDOUT ? "[LOGGED_OUT]" : "[LOGGED_IN]";
+        while(!result.toLowerCase().equals("quit") && state == State.SIGNEDOUT) {
+            System.out.print(stateString+" >>> ");
             String line = scanner.nextLine();
             try{
                 result = eval(line);
@@ -25,6 +27,9 @@ public class PreLoginRepl {
             } catch(Throwable e) {
                 System.out.println(e.toString());
             }
+        }
+        if(state == State.SIGNEDIN) {
+            new PostLoginUI(server).run();
         }
     }
 
