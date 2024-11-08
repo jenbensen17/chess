@@ -36,6 +36,7 @@ public class PreLoginRepl {
             return switch(cmd) {
               case "help" -> help();
               case "quit" -> "quit";
+              case "register" -> register(params);
               default -> help();
             };
         } catch(Exception e) {
@@ -52,4 +53,19 @@ public class PreLoginRepl {
                 """;
         return menu;
     }
+
+    private String register(String... params) {
+        if(params.length < 3) {
+            return "Please enter a valid username, password, and email address";
+        } else {
+            try {
+                server.register(params[0], params[1], params[2]);
+                state = State.SIGNEDIN;
+                return "Successfully registered as "+params[0];
+            } catch (Exception e) {
+                return "Invalid username or password";
+            }
+        }
+    }
+
 }
