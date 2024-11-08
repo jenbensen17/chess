@@ -3,8 +3,10 @@ package ui;
 import client.ServerFacade;
 import client.State;
 import model.AuthData;
+import model.GameData;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class PostLoginUI {
@@ -46,6 +48,7 @@ public class PostLoginUI {
                 case "quit" -> "quit";
                 case "logout" -> logout();
                 case "create" -> create(params);
+                case "list" -> list();
                 default -> help();
             };
         } catch(Exception e) {
@@ -84,6 +87,21 @@ public class PostLoginUI {
             } catch(Throwable e) {
                 return "Unable to create game";
             }
+        }
+    }
+
+    private String list() {
+        try{
+            HashSet<GameData> gameList = server.listGames(authData.getAuthToken());
+            String result = "";
+            int i = 1;
+            for(GameData gameData : gameList) {
+                result+=i+". "+gameData.toString()+"\n";
+                i++;
+            }
+            return result;
+        } catch(Throwable e) {
+            return "Unable to list games";
         }
     }
 

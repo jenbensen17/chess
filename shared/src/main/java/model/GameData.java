@@ -56,4 +56,12 @@ public class GameData {
         return Objects.hash(gameID, whiteUsername, blackUsername, gameName, game);
     }
 
+    @Override
+    public String toString() {
+        return
+                "gameID:" + gameID +
+                ", whiteUsername: " + whiteUsername  +
+                ", blackUsername: " + blackUsername +
+                ", gameName: " + gameName;
+    }
 }

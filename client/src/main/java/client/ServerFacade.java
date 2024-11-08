@@ -2,16 +2,15 @@ package client;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import model.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 public class ServerFacade {
 
@@ -49,9 +48,10 @@ public class ServerFacade {
     }
 
     public HashSet<GameData> listGames(String authToken) {
-        Map resp = makeRequest("GET", "/game", null, authToken, Map.class);
-        HashSet<GameData> games = new HashSet<>((Collection) resp.get("games"));
-        return games;
+        record listGamesResponse(HashSet<GameData> games){
+        }
+        var resp = makeRequest("GET", "/game", null, authToken, listGamesResponse.class);
+        return resp.games;
     }
 
     public void joinGame(String authToken, ChessGame.TeamColor playerColor, int gameID) {
