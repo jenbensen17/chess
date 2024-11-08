@@ -1,8 +1,12 @@
 package client;
 
+import chess.ChessGame;
 import model.AuthData;
+import model.GameData;
 import org.junit.jupiter.api.*;
 import server.Server;
+
+import java.util.HashSet;
 
 
 public class ServerFacadeTests {
@@ -101,6 +105,23 @@ public class ServerFacadeTests {
     public void listGamesFail() throws Exception {
         Assertions.assertThrows(Exception.class, () -> {
             facade.listGames("invalid");
+        });
+    }
+
+    @Test
+    public void joinGame() throws Exception {
+        AuthData authData = facade.register("player1", "password", "p1@email.com");
+        int gameID = facade.createGame(authData.getAuthToken(), "testGame");
+        facade.joinGame(authData.getAuthToken(), ChessGame.TeamColor.BLACK, gameID);
+        Assertions.assertThrows(Exception.class, () -> {
+            facade.joinGame(authData.getAuthToken(), ChessGame.TeamColor.BLACK, gameID);
+        });
+    }
+
+    @Test
+    public void joinGameFail() throws Exception {
+        Assertions.assertThrows(Exception.class, () -> {
+            facade.joinGame("invalid", ChessGame.TeamColor.BLACK, 0);
         });
     }
 

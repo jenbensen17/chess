@@ -1,5 +1,6 @@
 package client;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import model.*;
 
@@ -51,6 +52,11 @@ public class ServerFacade {
         Map resp = makeRequest("GET", "/game", null, authToken, Map.class);
         HashSet<GameData> games = new HashSet<>((Collection) resp.get("games"));
         return games;
+    }
+
+    public void joinGame(String authToken, ChessGame.TeamColor playerColor, int gameID) {
+        var req = Map.of("playerColor", playerColor, "gameID", gameID);
+        makeRequest("PUT", "/game", req, authToken, Map.class);
     }
 
     private <T> T makeRequest(String method, String path, Object request, String authToken, Class<T> responseClass) {
