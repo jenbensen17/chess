@@ -89,4 +89,19 @@ public class ServerFacadeTests {
         });
     }
 
+    @Test
+    public void listGames() throws Exception {
+        AuthData authData = facade.register("player1", "password", "p1@email.com");
+        facade.createGame(authData.getAuthToken(), "testGame");
+        facade.createGame(authData.getAuthToken(), "testGame2");
+        Assertions.assertEquals(2, facade.listGames(authData.getAuthToken()).size());
+    }
+
+    @Test
+    public void listGamesFail() throws Exception {
+        Assertions.assertThrows(Exception.class, () -> {
+            facade.listGames("invalid");
+        });
+    }
+
 }
