@@ -37,6 +37,7 @@ public class PreLoginRepl {
               case "help" -> help();
               case "quit" -> "quit";
               case "register" -> register(params);
+              case "login" -> login(params);
               default -> help();
             };
         } catch(Exception e) {
@@ -62,6 +63,20 @@ public class PreLoginRepl {
                 server.register(params[0], params[1], params[2]);
                 state = State.SIGNEDIN;
                 return "Successfully registered as "+params[0];
+            } catch (Exception e) {
+                return "User already exists";
+            }
+        }
+    }
+
+    private String login(String... params) {
+        if(params.length < 2) {
+            return "Please enter a valid username and password";
+        } else {
+            try{
+                server.login(params[0], params[1]);
+                state = State.SIGNEDIN;
+                return "Successfully logged in as "+params[0];
             } catch (Exception e) {
                 return "Invalid username or password";
             }
