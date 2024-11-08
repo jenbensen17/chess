@@ -45,6 +45,7 @@ public class PostLoginUI {
             return switch(cmd) {
                 case "quit" -> "quit";
                 case "logout" -> logout();
+                case "create" -> create(params);
                 default -> help();
             };
         } catch(Exception e) {
@@ -71,6 +72,19 @@ public class PostLoginUI {
             System.out.println("Unable to logout");
         }
         return "logged out";
+    }
+
+    private String create(String... params) {
+        if(params.length == 0) {
+            return "Please enter a game name";
+        } else {
+            try{
+                server.createGame(authData.getAuthToken(), params[0]);
+                return "Game successfully created";
+            } catch(Throwable e) {
+                return "Unable to create game";
+            }
+        }
     }
 
 }
