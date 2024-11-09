@@ -23,7 +23,7 @@ public class PostLoginUI {
         Scanner scanner = new Scanner(System.in);
         var result = "";
         var stateString = state == State.SIGNEDOUT ? "[LOGGED_OUT]" : "[LOGGED_IN]";
-        while(!result.toLowerCase().equals("quit") && state == State.SIGNEDIN && !result.equals("logged out")) {
+        while(!result.toLowerCase().equals("quit") && state == State.SIGNEDIN) {
             System.out.print(stateString+" >>> ");
             String line = scanner.nextLine();
             try{
@@ -33,8 +33,7 @@ public class PostLoginUI {
                 System.out.println(e.toString());
             }
         }
-        if(result.equals("logged out")) {
-            state = State.SIGNEDOUT;
+        if(state == State.SIGNEDOUT) {
             new PreLoginUI(server).run();
         }
     }
@@ -71,6 +70,7 @@ public class PostLoginUI {
     private String logout() {
         try{
             server.logout(authData.getAuthToken());
+            state = State.SIGNEDOUT;
         } catch(Throwable e) {
             System.out.println("Unable to logout");
         }
