@@ -143,15 +143,19 @@ public class PostLoginUI {
                         game = g;
                     }
                 }
-                return printBoard(game.getGame().getBoard(), ChessGame.TeamColor.WHITE) + "\n\n" + printBoard(game.getGame().getBoard(), ChessGame.TeamColor.BLACK);
+                printBoard(game.getGame().getBoard(), ChessGame.TeamColor.WHITE);
+                printBoard(game.getGame().getBoard(), ChessGame.TeamColor.BLACK);
+                return "Game Observed";
             } catch(Throwable e) {
                 return "Unable to observe game";
             }
         }
     }
 
-    private String printBoard(ChessBoard board, ChessGame.TeamColor color) {
-        String out = "|";
+    private void printBoard(ChessBoard board, ChessGame.TeamColor color) {
+        System.out.print("|");
+        boolean light = true;
+        bg(light);
         int limit = color == ChessGame.TeamColor.WHITE ? 8 : 1;
         int inc = color == ChessGame.TeamColor.WHITE ? 1 : -1;
         for (int i = color == ChessGame.TeamColor.WHITE ? 1 : 8; i != limit+inc; i+=inc) {
@@ -167,25 +171,26 @@ public class PostLoginUI {
                     } else {
                         rep = rep.toUpperCase();
                     }
-                    out += rep.charAt(0) + "|";
+                    System.out.print(rep.charAt(0) + "|");
                 } else {
-                    out += " |";
+                    System.out.print(" |");
                 }
-
+                light = !light;
+                bg(light);
             }
-            if (i != 8) {
-                out += "\n|";
+            if (i != limit+inc) {
+                System.out.print("\n|");
             }
         }
-        return out + "\n";
+        System.out.print("\n");
     }
 
-    private void light() {
-        System.out.print(SET_BG_COLOR_BLUE);
-    }
-
-    private void dark() {
-        System.out.print(SET_BG_COLOR_DARK_GREY);
+    private void bg(boolean light) {
+        if (light) {
+            System.out.print(SET_BG_COLOR_BLUE);
+        } else {
+            System.out.print(SET_BG_COLOR_DARK_GREY);
+        }
     }
 
 
