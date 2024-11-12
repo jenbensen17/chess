@@ -11,8 +11,7 @@ import model.GameData;
 
 import java.util.*;
 
-import static ui.EscapeSequences.SET_BG_COLOR_BLUE;
-import static ui.EscapeSequences.SET_BG_COLOR_DARK_GREY;
+import static ui.EscapeSequences.*;
 
 public class PostLoginUI {
     private final ServerFacade server;
@@ -153,36 +152,56 @@ public class PostLoginUI {
     }
 
     private void printBoard(ChessBoard board, ChessGame.TeamColor color) {
-        System.out.print("|");
+        System.out.println();
         boolean light = true;
-        bg(light);
         int limit = color == ChessGame.TeamColor.WHITE ? 8 : 1;
         int inc = color == ChessGame.TeamColor.WHITE ? 1 : -1;
         for (int i = color == ChessGame.TeamColor.WHITE ? 1 : 8; i != limit+inc; i+=inc) {
             for (int j = color == ChessGame.TeamColor.WHITE ? 1 : 8; j != limit+inc; j+=inc) {
+                bg(light);
                 if (board.getPiece(new ChessPosition(i, j)) != null) {
                     ChessPiece piece = board.getPiece(new ChessPosition(i, j));
                     String rep = piece.getPieceType().toString();
-                    if (rep == "KNIGHT") {
-                        rep = "N";
-                    }
-                    if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                        rep = rep.toLowerCase();
+                    if(piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                        printPiece(piece, WHITE_KING, WHITE_QUEEN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_PAWN, light);
                     } else {
-                        rep = rep.toUpperCase();
+                        printPiece(piece, BLACK_KING, BLACK_QUEEN, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_PAWN, light);
                     }
-                    System.out.print(rep.charAt(0) + "|");
                 } else {
-                    System.out.print(" |");
+                    System.out.print(EMPTY);
                 }
-                light = !light;
-                bg(light);
+                light=!light;
             }
             if (i != limit+inc) {
-                System.out.print("\n|");
+                System.out.print(RESET_BG_COLOR);
+                System.out.print("\n");
+                light = !light;
             }
         }
         System.out.print("\n");
+    }
+
+    private void printPiece(ChessPiece piece, String king, String queen, String knight, String bishop, String rook, String pawn, boolean light) {
+        switch(piece.getPieceType()) {
+            case KING -> {
+                if(piece.getTeamColor() == ChessGame.TeamColor.WHITE && !light) {
+                    System.out.print(king);
+                } else {
+                    System.out.print(queen);
+                }
+            }
+            case QUEEN -> {
+                if(piece.getTeamColor() == ChessGame.TeamColor.WHITE && light) {
+                    System.out.print(queen);
+                } else {
+                    System.out.print(king);
+                }
+            }
+            case KNIGHT -> System.out.print(knight);
+            case BISHOP -> System.out.print(bishop);
+            case ROOK -> System.out.print(rook);
+            case PAWN -> System.out.print(pawn);
+        }
     }
 
     private void bg(boolean light) {
