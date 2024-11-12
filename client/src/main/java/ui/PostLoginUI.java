@@ -1,12 +1,18 @@
 package ui;
 
+import chess.ChessBoard;
 import chess.ChessGame;
+import chess.ChessPiece;
+import chess.ChessPosition;
 import client.ServerFacade;
 import client.State;
 import model.AuthData;
 import model.GameData;
 
 import java.util.*;
+
+import static ui.EscapeSequences.SET_BG_COLOR_BLUE;
+import static ui.EscapeSequences.SET_BG_COLOR_DARK_GREY;
 
 public class PostLoginUI {
     private final ServerFacade server;
@@ -130,11 +136,56 @@ public class PostLoginUI {
         } else {
             try{
                 int gameID = games.get(params[0]);
-                return "Observing game";
+                HashSet<GameData> games = server.listGames(authData.getAuthToken());
+                GameData game = null;
+                for(GameData g : games) {
+                    if(g.getGameID() == gameID) {
+                        game = g;
+                    }
+                }
+                return printBoard(game.getGame().getBoard(), ChessGame.TeamColor.WHITE) + "\n\n" + printBoard(game.getGame().getBoard(), ChessGame.TeamColor.BLACK);
             } catch(Throwable e) {
                 return "Unable to observe game";
             }
         }
+    }
+
+    private String printBoard(ChessBoard board, ChessGame.TeamColor color) {
+        String out = "|";
+        int limit = color == ChessGame.TeamColor.WHITE ? 8 : 1;
+        int inc = color == ChessGame.TeamColor.WHITE ? 1 : -1;
+        for (int i = color == ChessGame.TeamColor.WHITE ? 1 : 8; i != limit+inc; i+=inc) {
+            for (int j = color == ChessGame.TeamColor.WHITE ? 1 : 8; j != limit+inc; j+=inc) {
+                if (board.getPiece(new ChessPosition(i, j)) != null) {
+                    ChessPiece piece = board.getPiece(new ChessPosition(i, j));
+                    String rep = piece.getPieceType().toString();
+                    if (rep == "KNIGHT") {
+                        rep = "N";
+                    }
+                    if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                        rep = rep.toLowerCase();
+                    } else {
+                        rep = rep.toUpperCase();
+                    }
+                    out += rep.charAt(0) + "|";
+                } else {
+                    out += " |";
+                }
+
+            }
+            if (i != 8) {
+                out += "\n|";
+            }
+        }
+        return out + "\n";
+    }
+
+    private void light() {
+        System.out.print(SET_BG_COLOR_BLUE);
+    }
+
+    private void dark() {
+        System.out.print(SET_BG_COLOR_DARK_GREY);
     }
 
 
