@@ -1,18 +1,18 @@
 package ui;
 
+import chess.ChessGame;
 import client.ServerFacade;
 import client.State;
 import model.AuthData;
 import model.GameData;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 public class PostLoginUI {
     private final ServerFacade server;
     private State state = State.SIGNEDIN;
     private final AuthData authData;
+    private Map<String, Integer> games;
 
     public PostLoginUI(ServerFacade server, AuthData authData) {
         this.server = server;
@@ -48,6 +48,7 @@ public class PostLoginUI {
                 case "logout" -> logout();
                 case "create" -> create(params);
                 case "list" -> list();
+                case "join" -> join(params);
                 default -> help();
             };
         } catch(Exception e) {
@@ -93,15 +94,32 @@ public class PostLoginUI {
     private String list() {
         try{
             HashSet<GameData> gameList = server.listGames(authData.getAuthToken());
+            games = new HashMap<String, Integer>();
             String result = "";
             int i = 1;
             for(GameData gameData : gameList) {
                 result+=i+". "+gameData.toString()+"\n";
+                games.put(""+i,gameData.getGameID());
                 i++;
             }
             return result;
         } catch(Throwable e) {
             return "Unable to list games";
+        }
+    }
+
+    private String join(String... params) {
+        if(params.length == 0 || (!Objects.equals(params[1], "white") && !Objects.equals(params[1], "black"))) {
+            return "Please enter a valid game ID and your team color";
+        } else {
+            try{
+                ChessGame.TeamColor color = params[1].equals("black") ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
+                int gameID = games.get(params[0]);
+                server.joinGame(authData.getAuthToken(), color, gameID);
+                return "Game successfully joined";
+            } catch(Throwable e) {
+                return "Unable to join game";
+            }
         }
     }
 

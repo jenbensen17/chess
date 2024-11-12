@@ -59,9 +59,8 @@ public class GameData {
     @Override
     public String toString() {
         return
-                "gameID:" + gameID +
+                "Game Name: " + gameName +
                 ", whiteUsername: " + whiteUsername  +
-                ", blackUsername: " + blackUsername +
-                ", gameName: " + gameName;
+                ", blackUsername: " + blackUsername;
     }
 }
