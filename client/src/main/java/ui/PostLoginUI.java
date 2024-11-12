@@ -49,6 +49,7 @@ public class PostLoginUI {
                 case "create" -> create(params);
                 case "list" -> list();
                 case "join" -> join(params);
+                case "observe" -> observe(params);
                 default -> help();
             };
         } catch(Exception e) {
@@ -122,5 +123,19 @@ public class PostLoginUI {
             }
         }
     }
+
+    private String observe(String... params) {
+        if(params.length == 0 ) {
+            return "Please enter a valid game ID";
+        } else {
+            try{
+                int gameID = games.get(params[0]);
+                return "Observing game";
+            } catch(Throwable e) {
+                return "Unable to observe game";
+            }
+        }
+    }
+
 
 }
