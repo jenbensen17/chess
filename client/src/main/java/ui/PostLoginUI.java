@@ -122,11 +122,24 @@ public class PostLoginUI {
                 ChessGame.TeamColor color = params[1].equals("black") ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
                 int gameID = games.get(params[0]);
                 server.joinGame(authData.getAuthToken(), color, gameID);
+                printGame(gameID);
                 return "Game successfully joined";
             } catch(Throwable e) {
                 return "Unable to join game";
             }
         }
+    }
+
+    private void printGame(int gameID) {
+        HashSet<GameData> games = server.listGames(authData.getAuthToken());
+        GameData game = null;
+        for(GameData g : games) {
+            if(g.getGameID() == gameID) {
+                game = g;
+            }
+        }
+        printBoard(game.getGame().getBoard(), ChessGame.TeamColor.WHITE);
+        printBoard(game.getGame().getBoard(), ChessGame.TeamColor.BLACK);
     }
 
     private String observe(String... params) {
@@ -135,15 +148,7 @@ public class PostLoginUI {
         } else {
             try{
                 int gameID = games.get(params[0]);
-                HashSet<GameData> games = server.listGames(authData.getAuthToken());
-                GameData game = null;
-                for(GameData g : games) {
-                    if(g.getGameID() == gameID) {
-                        game = g;
-                    }
-                }
-                printBoard(game.getGame().getBoard(), ChessGame.TeamColor.WHITE);
-                printBoard(game.getGame().getBoard(), ChessGame.TeamColor.BLACK);
+                printGame(gameID);
                 return "Game Observed";
             } catch(Throwable e) {
                 return "Unable to observe game";
@@ -172,11 +177,9 @@ public class PostLoginUI {
                 }
                 light=!light;
             }
-            if (i != limit+inc) {
-                System.out.print(RESET_BG_COLOR);
-                System.out.print("\n");
-                light = !light;
-            }
+            System.out.print(RESET_BG_COLOR);
+            System.out.print("\n");
+            light = !light;
         }
         System.out.print("\n");
     }
