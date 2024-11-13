@@ -90,7 +90,7 @@ public class PostLoginUI {
         } else {
             try{
                 server.createGame(authData.getAuthToken(), params[0]);
-                return "Game successfully created";
+                return list();
             } catch(Throwable e) {
                 return "Unable to create game";
             }
@@ -115,7 +115,7 @@ public class PostLoginUI {
     }
 
     private String join(String... params) {
-        if(params.length == 0 || (!Objects.equals(params[1], "white") && !Objects.equals(params[1], "black"))) {
+        if(params.length < 2   || (!Objects.equals(params[1], "white") && !Objects.equals(params[1], "black"))) {
             return "Please enter a valid game ID and your team color";
         } else {
             try{
@@ -158,10 +158,13 @@ public class PostLoginUI {
 
     private void printBoard(ChessBoard board, ChessGame.TeamColor color) {
         System.out.println();
+        printColumn();
+
         boolean light = true;
         int limit = color == ChessGame.TeamColor.WHITE ? 8 : 1;
         int inc = color == ChessGame.TeamColor.WHITE ? 1 : -1;
         for (int i = color == ChessGame.TeamColor.WHITE ? 1 : 8; i != limit+inc; i+=inc) {
+            printRow(i);
             for (int j = color == ChessGame.TeamColor.WHITE ? 1 : 8; j != limit+inc; j+=inc) {
                 bg(light);
                 if (board.getPiece(new ChessPosition(i, j)) != null) {
@@ -177,10 +180,12 @@ public class PostLoginUI {
                 }
                 light=!light;
             }
+            printRow(i);
             System.out.print(RESET_BG_COLOR);
             System.out.print("\n");
             light = !light;
         }
+        printColumn();
         System.out.print("\n");
     }
 
@@ -213,6 +218,28 @@ public class PostLoginUI {
         } else {
             System.out.print(SET_BG_COLOR_DARK_GREY);
         }
+    }
+
+    private void printColumn() {
+        System.out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        System.out.print(SET_TEXT_BOLD);
+        System.out.print(EMPTY);
+        for(char c =97; c<105; c++) {
+            System.out.print(" "+c+" ");
+        }
+        System.out.print(EMPTY);
+        System.out.println(RESET_BG_COLOR);
+        System.out.print(RESET_TEXT_BOLD_FAINT);
+    }
+
+    private void printRow(int i) {
+        System.out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        System.out.print(SET_TEXT_BOLD);
+        System.out.print(" "+i+" ");
+        System.out.print(RESET_BG_COLOR);
+        System.out.print(RESET_TEXT_BOLD_FAINT);
     }
 
 
