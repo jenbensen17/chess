@@ -50,9 +50,9 @@ public class ServerFacade {
     }
 
     public HashSet<GameData> listGames(String authToken) {
-        record listGamesResponse(HashSet<GameData> games) {
+        record ListGamesResponse(HashSet<GameData> games) {
         }
-        var resp = makeRequest("GET", "/game", null, authToken, listGamesResponse.class);
+        var resp = makeRequest("GET", "/game", null, authToken, ListGamesResponse.class);
         return resp.games;
     }
 

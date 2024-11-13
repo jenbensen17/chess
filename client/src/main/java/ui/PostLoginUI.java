@@ -28,7 +28,7 @@ public class PostLoginUI {
         Scanner scanner = new Scanner(System.in);
         var result = "";
         var stateString = state == State.SIGNEDOUT ? "[LOGGED_OUT]" : "[LOGGED_IN]";
-        while (!result.toLowerCase().equals("quit") && state == State.SIGNEDIN) {
+        while (!result.equalsIgnoreCase("quit") && state == State.SIGNEDIN) {
             System.out.print(stateString + " >>> ");
             String line = scanner.nextLine();
             try {
