@@ -96,7 +96,7 @@ public class PostLoginUI extends UI {
 
     private String join(String... params) {
         if (params.length < 2 || (!Objects.equals(params[1], "white") && !Objects.equals(params[1], "black"))) {
-            return "Please enter a valid game ID and your team color";
+            return "Please enter a valid game ID and your team color. To view games, use list command.";
         } else {
             try {
                 ChessGame.TeamColor color = params[1].equals("black") ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
@@ -124,7 +124,7 @@ public class PostLoginUI extends UI {
 
     private String observe(String... params) {
         if (params.length == 0) {
-            return "Please enter a valid game ID";
+            return "Please enter a valid game ID. To view games, use list command.";
         } else {
             try {
                 int gameID = games.get(params[0]);
@@ -138,7 +138,7 @@ public class PostLoginUI extends UI {
 
     private void printBoard(ChessBoard board, ChessGame.TeamColor color) {
         System.out.println();
-        printColumn();
+        printColumn(color);
 
         boolean light = true;
         int limit = color == ChessGame.TeamColor.WHITE ? 8 : 1;
@@ -165,7 +165,7 @@ public class PostLoginUI extends UI {
             System.out.print("\n");
             light = !light;
         }
-        printColumn();
+        printColumn(color);
         System.out.print("\n");
     }
 
@@ -200,13 +200,19 @@ public class PostLoginUI extends UI {
         }
     }
 
-    private void printColumn() {
+    private void printColumn(ChessGame.TeamColor color) {
         System.out.print(SET_TEXT_COLOR_WHITE);
         System.out.print(SET_BG_COLOR_LIGHT_GREY);
         System.out.print(SET_TEXT_BOLD);
         System.out.print(EMPTY);
-        for (char c = 97; c < 105; c++) {
-            System.out.print(" " + c + " ");
+        if(color == ChessGame.TeamColor.BLACK) {
+            for (char c = 97; c < 105; c++) {
+                System.out.print(" " + c + " ");
+            }
+        } else {
+            for (char c = 104; c > 96; c--) {
+                System.out.print(" " + c + " ");
+            }
         }
         System.out.print(EMPTY);
         System.out.println(RESET_BG_COLOR);
