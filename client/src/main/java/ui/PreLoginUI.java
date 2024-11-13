@@ -7,7 +7,7 @@ import model.AuthData;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class PreLoginUI extends UI{
+public class PreLoginUI extends UI {
     private final ServerFacade server;
 
     public PreLoginUI(ServerFacade server) {

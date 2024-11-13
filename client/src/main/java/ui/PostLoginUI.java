@@ -13,7 +13,7 @@ import java.util.*;
 
 import static ui.EscapeSequences.*;
 
-public class PostLoginUI extends UI{
+public class PostLoginUI extends UI {
     private final ServerFacade server;
     private Map<String, Integer> games;
 
