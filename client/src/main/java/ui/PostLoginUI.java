@@ -6,7 +6,6 @@ import chess.ChessPiece;
 import chess.ChessPosition;
 import client.ServerFacade;
 import client.State;
-import model.AuthData;
 import model.GameData;
 
 import java.util.*;
@@ -205,7 +204,7 @@ public class PostLoginUI extends UI {
         System.out.print(SET_BG_COLOR_LIGHT_GREY);
         System.out.print(SET_TEXT_BOLD);
         System.out.print(EMPTY);
-        if(color == ChessGame.TeamColor.BLACK) {
+        if (color == ChessGame.TeamColor.BLACK) {
             for (char c = 97; c < 105; c++) {
                 System.out.print(" " + c + " ");
             }

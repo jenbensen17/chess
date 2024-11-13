@@ -2,10 +2,8 @@ package ui;
 
 import client.ServerFacade;
 import client.State;
-import model.AuthData;
 
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class PreLoginUI extends UI {
     private final ServerFacade server;
