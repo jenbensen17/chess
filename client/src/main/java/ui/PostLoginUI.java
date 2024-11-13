@@ -13,34 +13,13 @@ import java.util.*;
 
 import static ui.EscapeSequences.*;
 
-public class PostLoginUI {
+public class PostLoginUI extends UI{
     private final ServerFacade server;
-    private State state = State.SIGNEDIN;
-    private final AuthData authData;
     private Map<String, Integer> games;
 
-    public PostLoginUI(ServerFacade server, AuthData authData) {
+    public PostLoginUI(ServerFacade server) {
         this.server = server;
-        this.authData = authData;
-    }
 
-    public void run() {
-        Scanner scanner = new Scanner(System.in);
-        var result = "";
-        var stateString = state == State.SIGNEDOUT ? "[LOGGED_OUT]" : "[LOGGED_IN]";
-        while (!result.equalsIgnoreCase("quit") && state == State.SIGNEDIN) {
-            System.out.print(stateString + " >>> ");
-            String line = scanner.nextLine();
-            try {
-                result = eval(line);
-                System.out.println(result);
-            } catch (Throwable e) {
-                System.out.println(e.toString());
-            }
-        }
-        if (state == State.SIGNEDOUT) {
-            new PreLoginUI(server).run();
-        }
     }
 
     public String eval(String input) {
@@ -76,8 +55,9 @@ public class PostLoginUI {
 
     private String logout() {
         try {
-            server.logout(authData.getAuthToken());
-            state = State.SIGNEDOUT;
+            server.logout(getAuthData().getAuthToken());
+            Repl.setState(State.SIGNEDOUT);
+            setAuthData(null);
         } catch (Throwable e) {
             System.out.println("Unable to logout");
         }
@@ -89,7 +69,7 @@ public class PostLoginUI {
             return "Please enter a game name";
         } else {
             try {
-                server.createGame(authData.getAuthToken(), params[0]);
+                server.createGame(getAuthData().getAuthToken(), params[0]);
                 return list();
             } catch (Throwable e) {
                 return "Unable to create game";
@@ -99,7 +79,7 @@ public class PostLoginUI {
 
     private String list() {
         try {
-            HashSet<GameData> gameList = server.listGames(authData.getAuthToken());
+            HashSet<GameData> gameList = server.listGames(getAuthData().getAuthToken());
             games = new HashMap<String, Integer>();
             String result = "";
             int i = 1;
@@ -121,7 +101,7 @@ public class PostLoginUI {
             try {
                 ChessGame.TeamColor color = params[1].equals("black") ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
                 int gameID = games.get(params[0]);
-                server.joinGame(authData.getAuthToken(), color, gameID);
+                server.joinGame(getAuthData().getAuthToken(), color, gameID);
                 printGame(gameID);
                 return "Game successfully joined";
             } catch (Throwable e) {
@@ -131,7 +111,7 @@ public class PostLoginUI {
     }
 
     private void printGame(int gameID) {
-        HashSet<GameData> games = server.listGames(authData.getAuthToken());
+        HashSet<GameData> games = server.listGames(getAuthData().getAuthToken());
         GameData game = null;
         for (GameData g : games) {
             if (g.getGameID() == gameID) {

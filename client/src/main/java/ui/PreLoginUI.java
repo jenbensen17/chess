@@ -7,33 +7,11 @@ import model.AuthData;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class PreLoginUI {
+public class PreLoginUI extends UI{
     private final ServerFacade server;
-    private State state = State.SIGNEDOUT;
-    private AuthData authData;
 
     public PreLoginUI(ServerFacade server) {
         this.server = server;
-        this.authData = null;
-    }
-
-    public void run() {
-        Scanner scanner = new Scanner(System.in);
-        var result = "";
-        var stateString = state == State.SIGNEDOUT ? "[LOGGED_OUT]" : "[LOGGED_IN]";
-        while (!result.toLowerCase().equals("quit") && state == State.SIGNEDOUT) {
-            System.out.print(stateString + " >>> ");
-            String line = scanner.nextLine();
-            try {
-                result = eval(line);
-                System.out.println(result);
-            } catch (Throwable e) {
-                System.out.println(e.toString());
-            }
-        }
-        if (state == State.SIGNEDIN) {
-            new PostLoginUI(server, authData).run();
-        }
     }
 
     public String eval(String input) {
@@ -68,8 +46,8 @@ public class PreLoginUI {
             return "Please enter a valid username, password, and email address";
         } else {
             try {
-                authData = server.register(params[0], params[1], params[2]);
-                state = State.SIGNEDIN;
+                setAuthData(server.register(params[0], params[1], params[2]));
+                Repl.setState(State.SIGNEDIN);
                 return "Successfully registered as " + params[0];
             } catch (Exception e) {
                 return "User already exists";
@@ -82,8 +60,8 @@ public class PreLoginUI {
             return "Please enter a valid username and password";
         } else {
             try {
-                authData = server.login(params[0], params[1]);
-                state = State.SIGNEDIN;
+                setAuthData(server.login(params[0], params[1]));
+                Repl.setState(State.SIGNEDIN);
                 return "Successfully logged in as " + params[0];
             } catch (Exception e) {
                 return "Invalid username or password";
