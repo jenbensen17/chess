@@ -6,6 +6,7 @@ public class Repl {
 
     private final ServerFacade server;
     private final PreLoginUI preLogin;
+
     public Repl(ServerFacade server) {
         this.server = server;
         this.preLogin = new PreLoginUI(server);

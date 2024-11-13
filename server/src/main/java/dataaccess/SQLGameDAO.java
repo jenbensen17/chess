@@ -32,7 +32,6 @@ public class SQLGameDAO implements GameDAO {
     }
 
 
-
     @Override
     public GameData getGame(int gameID) throws DataAccessException {
         int dbGameId;

@@ -48,18 +48,20 @@ public class EscapeSequences {
     public static final String RESET_BG_COLOR = UNICODE_ESCAPE + "[49m";
 
     public static final String WHITE_KING = SET_TEXT_COLOR_WHITE + " K ";
-    public static final String WHITE_QUEEN =SET_TEXT_COLOR_WHITE + " Q ";
+    public static final String WHITE_QUEEN = SET_TEXT_COLOR_WHITE + " Q ";
     public static final String WHITE_BISHOP = SET_TEXT_COLOR_WHITE + " B ";
-    public static final String WHITE_KNIGHT =SET_TEXT_COLOR_WHITE + " N ";
+    public static final String WHITE_KNIGHT = SET_TEXT_COLOR_WHITE + " N ";
     public static final String WHITE_ROOK = SET_TEXT_COLOR_WHITE + " R ";
     public static final String WHITE_PAWN = SET_TEXT_COLOR_WHITE + " P ";
-    public static final String BLACK_KING = SET_TEXT_COLOR_LIGHT_GREY+" K ";
-    public static final String BLACK_QUEEN = SET_TEXT_COLOR_LIGHT_GREY+" Q ";
-    public static final String BLACK_BISHOP = SET_TEXT_COLOR_LIGHT_GREY+" B ";
-    public static final String BLACK_KNIGHT = SET_TEXT_COLOR_LIGHT_GREY+" N ";
-    public static final String BLACK_ROOK = SET_TEXT_COLOR_LIGHT_GREY+" R ";
-    public static final String BLACK_PAWN = SET_TEXT_COLOR_LIGHT_GREY+" P ";
+    public static final String BLACK_KING = SET_TEXT_COLOR_LIGHT_GREY + " K ";
+    public static final String BLACK_QUEEN = SET_TEXT_COLOR_LIGHT_GREY + " Q ";
+    public static final String BLACK_BISHOP = SET_TEXT_COLOR_LIGHT_GREY + " B ";
+    public static final String BLACK_KNIGHT = SET_TEXT_COLOR_LIGHT_GREY + " N ";
+    public static final String BLACK_ROOK = SET_TEXT_COLOR_LIGHT_GREY + " R ";
+    public static final String BLACK_PAWN = SET_TEXT_COLOR_LIGHT_GREY + " P ";
     public static final String EMPTY = "   ";
 
-    public static String moveCursorToLocation(int x, int y) { return UNICODE_ESCAPE + "[" + y + ";" + x + "H"; }
+    public static String moveCursorToLocation(int x, int y) {
+        return UNICODE_ESCAPE + "[" + y + ";" + x + "H";
+    }
 }

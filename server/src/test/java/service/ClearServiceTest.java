@@ -9,11 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class ClearServiceTest {
 
     private UserDAO userDAO;

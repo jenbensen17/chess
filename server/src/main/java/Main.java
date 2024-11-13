@@ -1,4 +1,5 @@
-import chess.*;
+import chess.ChessGame;
+import chess.ChessPiece;
 import dataaccess.DataAccessException;
 import server.Server;
 

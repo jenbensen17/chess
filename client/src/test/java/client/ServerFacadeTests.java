@@ -2,11 +2,8 @@ package client;
 
 import chess.ChessGame;
 import model.AuthData;
-import model.GameData;
 import org.junit.jupiter.api.*;
 import server.Server;
-
-import java.util.HashSet;
 
 
 public class ServerFacadeTests {

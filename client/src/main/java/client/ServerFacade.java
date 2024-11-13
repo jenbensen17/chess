@@ -2,28 +2,30 @@ package client;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import model.*;
+import model.AuthData;
+import model.GameData;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.*;
-import java.lang.reflect.Type;
-import java.net.*;
-import java.util.*;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.util.HashSet;
+import java.util.Map;
 
 public class ServerFacade {
 
     private String serverUrl = "http://localhost:";
 
     public ServerFacade(int serverUrl) {
-        this.serverUrl+=serverUrl;
+        this.serverUrl += serverUrl;
     }
 
     public AuthData register(String username, String password, String email) {
         var req = Map.of("username", username, "password", password, "email", email);
-        Map resp = makeRequest("POST", "/user", req, null,Map.class);
-        var authToken = (String)resp.get("authToken");
+        Map resp = makeRequest("POST", "/user", req, null, Map.class);
+        var authToken = (String) resp.get("authToken");
         AuthData authData = new AuthData(authToken, username);
         return authData;
     }
@@ -31,7 +33,7 @@ public class ServerFacade {
     public AuthData login(String username, String password) {
         var req = Map.of("username", username, "password", password);
         Map resp = makeRequest("POST", "/session", req, null, Map.class);
-        var authToken = (String)resp.get("authToken");
+        var authToken = (String) resp.get("authToken");
         AuthData authData = new AuthData(authToken, username);
         return authData;
     }
@@ -43,12 +45,12 @@ public class ServerFacade {
     public int createGame(String authToken, String gameName) {
         var req = Map.of("gameName", gameName);
         Map resp = makeRequest("POST", "/game", req, authToken, Map.class);
-        int gameId =  (int)Math.round((Double)resp.get("gameID"));
+        int gameId = (int) Math.round((Double) resp.get("gameID"));
         return gameId;
     }
 
     public HashSet<GameData> listGames(String authToken) {
-        record listGamesResponse(HashSet<GameData> games){
+        record listGamesResponse(HashSet<GameData> games) {
         }
         var resp = makeRequest("GET", "/game", null, authToken, listGamesResponse.class);
         return resp.games;
@@ -60,29 +62,29 @@ public class ServerFacade {
     }
 
     private <T> T makeRequest(String method, String path, Object request, String authToken, Class<T> responseClass) {
-        try{
-            URI url = (new URI(serverUrl+path));
-            HttpURLConnection http = (HttpURLConnection)url.toURL().openConnection();
-             http.setRequestMethod(method);
+        try {
+            URI url = (new URI(serverUrl + path));
+            HttpURLConnection http = (HttpURLConnection) url.toURL().openConnection();
+            http.setRequestMethod(method);
             http.setDoOutput(true);
-            if(authToken != null){
+            if (authToken != null) {
                 writeHeader(authToken, http);
             }
             writeBody(request, http);
             http.connect();
             throwIfNotSuccessful(http);
             return readBody(http, responseClass);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private static void writeBody(Object request, HttpURLConnection http) throws IOException {
-        if(request!= null){
+        if (request != null) {
             http.addRequestProperty("Content-Type", "application/json");
             String reqData = new Gson().toJson(request);
-            try(OutputStream reqBody = http.getOutputStream()) {
-               reqBody.write(reqData.getBytes());
+            try (OutputStream reqBody = http.getOutputStream()) {
+                reqBody.write(reqData.getBytes());
             }
         }
     }

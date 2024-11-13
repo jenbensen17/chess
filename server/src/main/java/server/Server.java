@@ -4,7 +4,7 @@ import dataaccess.*;
 import service.ClearService;
 import service.GameService;
 import service.UserService;
-import spark.*;
+import spark.Spark;
 
 public class Server {
 
