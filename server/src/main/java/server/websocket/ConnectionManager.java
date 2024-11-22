@@ -20,6 +20,10 @@ public class ConnectionManager {
         connections.remove(gameID);
     }
 
+    public Connection getConnection(int gameID) {
+        return connections.get(gameID);
+    }
+
     public void broadcast(int excludeGameID, ServerMessage message) throws IOException {
         var removeList = new ArrayList<Connection>();
         for(var c: connections.values()) {

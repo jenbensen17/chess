@@ -12,9 +12,9 @@ public class Server {
     ClearService clearService;
     ClearHandler clearHandler;
 
-    UserDAO userDAO;
-    AuthDAO authDAO;
-    GameDAO gameDAO;
+    static UserDAO userDAO;
+    public static AuthDAO authDAO;
+    public static GameDAO gameDAO;
     UserService userService;
     UserHandler userHandler;
     GameService gameService;
