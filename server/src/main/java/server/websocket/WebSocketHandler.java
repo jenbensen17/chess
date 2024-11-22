@@ -1,10 +1,13 @@
 package server.websocket;
 
+import com.google.gson.Gson;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import websocket.commands.UserGameCommand;
+import websocket.messages.ServerMessage;
 
 import java.io.IOException;
 
@@ -29,6 +32,17 @@ public class WebSocketHandler {
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws IOException {
-        System.out.println("Received message: " + message);
+        UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);
+        switch(command.getCommandType()) {
+            case CONNECT -> connect(command.getAuthToken(), command.getGameID(), session);
+        }
+    }
+
+    private void connect( String authToken,  int gameID, Session session) throws IOException {
+
+
+        connections.add(gameID, session);
+        var message = String.format("Connected to game:%d", gameID);
+
     }
 }
