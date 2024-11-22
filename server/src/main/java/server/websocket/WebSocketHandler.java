@@ -29,6 +29,6 @@ public class WebSocketHandler {
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws IOException {
-
+        System.out.println("Received message: " + message);
     }
 }
