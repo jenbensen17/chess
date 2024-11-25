@@ -1,5 +1,7 @@
 package server.websocket;
 
+import chess.ChessGame;
+import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import model.AuthData;
@@ -10,6 +12,8 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import server.Server;
+import websocket.commands.MakeMove;
 import websocket.commands.UserGameCommand;
 import websocket.messages.Error;
 import websocket.messages.LoadGame;
@@ -34,32 +38,60 @@ public class WebSocketHandler {
     }
 
     @OnWebSocketMessage
-    public void onMessage(Session session, String message) throws IOException, DataAccessException {
+    public void onMessage(Session session, String message) throws IOException, DataAccessException, InvalidMoveException {
         UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);
         switch(command.getCommandType()) {
-            case CONNECT -> connect(command.getAuthToken(), command.getGameID(), session);
+            case CONNECT -> connect(command, session);
+            case MAKE_MOVE -> makeMove(new Gson().fromJson(message, MakeMove.class), session);
         }
     }
 
-    private void connect( String authToken, int gameID, Session session) throws IOException, DataAccessException {
+    private void connect( UserGameCommand command, Session session) throws IOException {
 
 
         try {
-            connections.add(authToken, session);
-            Connection connection = connections.getConnection(authToken);
+            connections.add(command.getAuthToken(), session);
+            Connection connection = connections.getConnection(command.getAuthToken());
 
-            AuthData authData = server.Server.authDAO.getAuth(authToken);
-            GameData gameData = server.Server.gameDAO.getGame(gameID);
+            AuthData authData = server.Server.authDAO.getAuth(command.getAuthToken());
+            GameData gameData = server.Server.gameDAO.getGame(command.getGameID());
 
             LoadGame loadGame = new LoadGame(gameData.getGame());
 
             connection.send(loadGame);
-            Notification notification = new Notification(authData.getUsername() + " has joined game " + gameID + " as ");
-            connections.broadcast(authToken, notification);
+            Notification notification = new Notification(authData.getUsername() + " has joined game " + command.getGameID() + " as ");
+            connections.broadcast(command.getAuthToken(), notification);
         } catch (DataAccessException e) {
-            Connection connection = connections.getConnection(authToken);
+            Connection connection = connections.getConnection(command.getAuthToken());
             Error errorMessage = new Error("Error: invalid request");
             connection.send(errorMessage);
+        }
+    }
+
+    public void makeMove(MakeMove command, Session session) throws DataAccessException, InvalidMoveException, IOException {
+
+        Connection connection = connections.getConnection(command.getAuthToken());
+        AuthData authData = server.Server.authDAO.getAuth(command.getAuthToken());
+        GameData gameData = server.Server.gameDAO.getGame(command.getGameID());
+
+        ChessGame.TeamColor color = getUserColor(authData, gameData);
+        gameData.getGame().makeMove(command.getMove());
+        Server.gameDAO.updateGameState(gameData);
+
+        LoadGame loadGame = new LoadGame(gameData.getGame());
+        connection.send(loadGame);
+        connections.broadcast(command.getAuthToken(), loadGame);
+
+        Notification notification = new Notification("a new move was made");
+        connections.broadcast(command.getAuthToken(), notification);
+
+    }
+
+    public ChessGame.TeamColor getUserColor(AuthData authData, GameData gameData) {
+        if(gameData.getWhiteUsername().equals(authData.getUsername())) {
+            return ChessGame.TeamColor.WHITE;
+        } else {
+            return ChessGame.TeamColor.BLACK;
         }
     }
 }

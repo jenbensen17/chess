@@ -72,4 +72,9 @@ public class MemoryGameDAO implements GameDAO {
     public void removeGames() {
         games.clear();
     }
+
+    @Override
+    public void updateGameState(GameData gameData) {
+
+    }
 }

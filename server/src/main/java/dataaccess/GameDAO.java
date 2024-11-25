@@ -16,4 +16,6 @@ public interface GameDAO {
     HashSet<GameData> listGames() throws DataAccessException;
 
     void removeGames();
+
+    void updateGameState(GameData gameData);
 }
