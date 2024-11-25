@@ -57,6 +57,10 @@ public class WebSocketHandler {
             Error err = new Error("Error: not a player");
             connection.send(err);
             return;
+        } else if (gameData.getGame().isGameOver()) {
+            Error err = new Error("Error: game is over");
+            connection.send(err);
+            return;
         }
         gameData.getGame().endGame();
         Server.gameDAO.updateGameState(gameData);

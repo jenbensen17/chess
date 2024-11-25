@@ -137,7 +137,7 @@ public class ChessGame {
         return Objects.hash(state.turn(), state.board());
     }
 
-    public boolean getGameOver(){
+    public boolean isGameOver(){
         return gameOver;
     }
 
