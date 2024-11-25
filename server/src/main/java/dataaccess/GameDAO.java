@@ -18,4 +18,6 @@ public interface GameDAO {
     void removeGames();
 
     void updateGameState(GameData gameData);
+
+    void removePlayer(int gameID, ChessGame.TeamColor color);
 }

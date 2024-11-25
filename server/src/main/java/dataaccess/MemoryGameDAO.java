@@ -77,4 +77,9 @@ public class MemoryGameDAO implements GameDAO {
     public void updateGameState(GameData gameData) {
 
     }
+
+    @Override
+    public void removePlayer(int gameID, ChessGame.TeamColor color) {
+
+    }
 }

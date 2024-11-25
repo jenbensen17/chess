@@ -105,12 +105,7 @@ public class WebSocketHandler {
         AuthData authData = Server.authDAO.getAuth(command.getAuthToken());
         GameData gameData = Server.gameDAO.getGame(command.getGameID());
         ChessGame.TeamColor color = getUserColor(authData, gameData);
-        if(color == ChessGame.TeamColor.WHITE) {
-            gameData = new GameData(gameData.getGameID(), null, gameData.getBlackUsername(), gameData.getGameName(), gameData.getGame());
-        } else {
-            gameData = new GameData(gameData.getGameID(), gameData.getWhiteUsername(), null, gameData.getGameName(), gameData.getGame());
-        }
-        Server.gameDAO.updateGameState(gameData);
+        Server.gameDAO.removePlayer(gameData.getGameID(), color);
         connection.session.close();
         Notification notification = new Notification(authData.getUsername() + " has left the game");
         connections.broadcast(command.getAuthToken(), notification);
@@ -119,10 +114,12 @@ public class WebSocketHandler {
     }
 
     public ChessGame.TeamColor getUserColor(AuthData authData, GameData gameData) {
-        if(gameData.getWhiteUsername().equals(authData.getUsername())) {
+        if(gameData.getWhiteUsername() != null && gameData.getWhiteUsername().equals(authData.getUsername())) {
             return ChessGame.TeamColor.WHITE;
-        } else {
+        } else if (gameData.getBlackUsername() != null) {
             return ChessGame.TeamColor.BLACK;
+        } else {
+            return null;
         }
     }
 }

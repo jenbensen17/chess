@@ -133,6 +133,18 @@ public class SQLGameDAO implements GameDAO {
         }
     }
 
+    public void removePlayer(int gameID, ChessGame.TeamColor playerColor) {
+        try (var conn = DatabaseManager.getConnection()) {
+            String colorToUpdate = playerColor == ChessGame.TeamColor.BLACK ? "black_username=null" : "white_username=null";
+            try (var preparedStatement = conn.prepareStatement("UPDATE gameTable SET " + colorToUpdate + " WHERE game_id = ?")) {
+                preparedStatement.setInt(1, gameID);
+                preparedStatement.executeUpdate();
+            }
+        } catch (SQLException | DataAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public HashSet<GameData> listGames() throws DataAccessException {
         HashSet<GameData> games = new HashSet<>();
