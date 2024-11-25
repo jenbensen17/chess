@@ -52,6 +52,12 @@ public class WebSocketHandler {
         Connection connection = connections.getConnection(command.getAuthToken());
         AuthData authData = server.Server.authDAO.getAuth(command.getAuthToken());
         GameData gameData = server.Server.gameDAO.getGame(command.getGameID());
+        ChessGame.TeamColor userColor = getUserColor(authData, gameData);
+        if(userColor == null) {
+            Error err = new Error("Error: not a player");
+            connection.send(err);
+            return;
+        }
         gameData.getGame().endGame();
         Server.gameDAO.updateGameState(gameData);
         Notification notification = new Notification(authData.getUsername() + " has resigned from the game.");
@@ -128,7 +134,7 @@ public class WebSocketHandler {
     public ChessGame.TeamColor getUserColor(AuthData authData, GameData gameData) {
         if(gameData.getWhiteUsername() != null && gameData.getWhiteUsername().equals(authData.getUsername())) {
             return ChessGame.TeamColor.WHITE;
-        } else if (gameData.getBlackUsername() != null) {
+        } else if (gameData.getBlackUsername() != null && gameData.getBlackUsername().equals(authData.getUsername())) {
             return ChessGame.TeamColor.BLACK;
         } else {
             return null;
