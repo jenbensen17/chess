@@ -12,8 +12,8 @@ public class ConnectionManager {
     public final ConcurrentHashMap<String, Connection> connections
             = new ConcurrentHashMap<>();
 
-    public void add(String authToken, Session session) {
-        var connection = new Connection(authToken, session);
+    public void add(String authToken, Session session, int gameID) {
+        var connection = new Connection(authToken, session, gameID);
         connections.put(authToken, connection);
     }
 
@@ -27,9 +27,10 @@ public class ConnectionManager {
 
     public void broadcast(String excludeToken, ServerMessage message) throws IOException {
         var removeList = new ArrayList<Connection>();
+        int gameID = connections.get(excludeToken).gameID;
         for(var c: connections.values()) {
             if(c.session.isOpen()) {
-                if(!(Objects.equals(c.authToken, excludeToken))) {
+                if(!(Objects.equals(c.authToken, excludeToken)) && c.gameID == gameID) {
                     c.send(message);
                 }
             } else {

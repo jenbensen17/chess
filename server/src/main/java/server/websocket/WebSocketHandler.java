@@ -73,7 +73,7 @@ public class WebSocketHandler {
 
 
         try {
-            connections.add(command.getAuthToken(), session);
+            connections.add(command.getAuthToken(), session, command.getGameID());
             Connection connection = connections.getConnection(command.getAuthToken());
 
             AuthData authData = server.Server.authDAO.getAuth(command.getAuthToken());
