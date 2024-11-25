@@ -68,32 +68,33 @@ public class WebSocketHandler {
         }
     }
 
-    public void makeMove(MakeMove command, Session session) throws DataAccessException, InvalidMoveException, IOException {
+    public void makeMove(MakeMove command, Session session) throws IOException {
 
         try {
             Connection connection = connections.getConnection(command.getAuthToken());
+            if(connection == null) {
+                throw new IOException();
+            }
             AuthData authData = Server.authDAO.getAuth(command.getAuthToken());
             GameData gameData = Server.gameDAO.getGame(command.getGameID());
-
             ChessGame.TeamColor color = getUserColor(authData, gameData);
+            if(!(gameData.getGame().getTeamTurn() == color)) {
+                throw new InvalidMoveException();
+            }
             gameData.getGame().makeMove(command.getMove());
             Server.gameDAO.updateGameState(gameData);
-
             LoadGame loadGame = new LoadGame(gameData.getGame());
             connection.send(loadGame);
             connections.broadcast(command.getAuthToken(), loadGame);
-
             Notification notification = new Notification("a new move was made");
             connections.broadcast(command.getAuthToken(), notification);
-        } catch (DataAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidMoveException e) {
+        } catch (InvalidMoveException | DataAccessException e) {
             Connection connection = connections.getConnection(command.getAuthToken());
             Error err = new Error("Error: invalid move");
             connection.send(err);
         } catch (IOException e) {
-
-            throw new RuntimeException(e);
+                Error err = new Error("Error: bad auth token");
+                session.getRemote().sendString(new Gson().toJson(err));
         }
 
     }
