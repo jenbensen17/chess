@@ -11,6 +11,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import websocket.commands.UserGameCommand;
+import websocket.messages.Error;
 import websocket.messages.LoadGame;
 import websocket.messages.Notification;
 import websocket.messages.ServerMessage;
@@ -43,16 +44,22 @@ public class WebSocketHandler {
     private void connect( String authToken, int gameID, Session session) throws IOException, DataAccessException {
 
 
-        connections.add(authToken, session);
-        Connection connection = connections.getConnection(authToken);
+        try {
+            connections.add(authToken, session);
+            Connection connection = connections.getConnection(authToken);
 
-        AuthData authData = server.Server.authDAO.getAuth(authToken);
-        GameData gameData = server.Server.gameDAO.getGame(gameID);
+            AuthData authData = server.Server.authDAO.getAuth(authToken);
+            GameData gameData = server.Server.gameDAO.getGame(gameID);
 
-        LoadGame loadGame = new LoadGame(gameData.getGame());
+            LoadGame loadGame = new LoadGame(gameData.getGame());
 
-        connection.send(loadGame);
-        Notification notification = new Notification(authData.getUsername() + " has joined game " + gameID + " as ");
-        connections.broadcast(authToken, notification);
+            connection.send(loadGame);
+            Notification notification = new Notification(authData.getUsername() + " has joined game " + gameID + " as ");
+            connections.broadcast(authToken, notification);
+        } catch (DataAccessException e) {
+            Connection connection = connections.getConnection(authToken);
+            Error errorMessage = new Error("Error: invalid request");
+            connection.send(errorMessage);
+        }
     }
 }
