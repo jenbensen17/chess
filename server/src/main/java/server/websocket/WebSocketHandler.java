@@ -43,6 +43,7 @@ public class WebSocketHandler {
         switch(command.getCommandType()) {
             case CONNECT -> connect(command, session);
             case MAKE_MOVE -> makeMove(new Gson().fromJson(message, MakeMove.class), session);
+            case LEAVE -> leave(command, session);
         }
     }
 
@@ -96,6 +97,24 @@ public class WebSocketHandler {
                 Error err = new Error("Error: bad auth token");
                 session.getRemote().sendString(new Gson().toJson(err));
         }
+
+    }
+
+    public void leave(UserGameCommand command, Session session) throws DataAccessException, IOException {
+        Connection connection = connections.getConnection(command.getAuthToken());
+        AuthData authData = Server.authDAO.getAuth(command.getAuthToken());
+        GameData gameData = Server.gameDAO.getGame(command.getGameID());
+        ChessGame.TeamColor color = getUserColor(authData, gameData);
+        if(color == ChessGame.TeamColor.WHITE) {
+            gameData = new GameData(gameData.getGameID(), null, gameData.getBlackUsername(), gameData.getGameName(), gameData.getGame());
+        } else {
+            gameData = new GameData(gameData.getGameID(), gameData.getWhiteUsername(), null, gameData.getGameName(), gameData.getGame());
+        }
+        Server.gameDAO.updateGameState(gameData);
+        connection.session.close();
+        Notification notification = new Notification(authData.getUsername() + " has left the game");
+        connections.broadcast(command.getAuthToken(), notification);
+
 
     }
 
