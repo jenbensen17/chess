@@ -12,6 +12,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import websocket.commands.UserGameCommand;
 import websocket.messages.LoadGame;
+import websocket.messages.Notification;
 import websocket.messages.ServerMessage;
 
 import java.io.IOException;
@@ -21,16 +22,12 @@ public class WebSocketHandler {
 
     private final ConnectionManager connections = new ConnectionManager();
 
-    @OnWebSocketConnect
-    public void onConnect(Session session) {
-        connections.add(0,session);
-    }
 
     @OnWebSocketClose
     public void onClose(Session session, int statusCode, String reason) {
         for(var c: connections.connections.values()) {
             if(c.session.equals(session)) {
-                connections.remove(c.gameID);
+                connections.remove(c.authToken);
             }
         }
     }
@@ -43,19 +40,19 @@ public class WebSocketHandler {
         }
     }
 
-    private void connect( String authToken,  int gameID, Session session) throws IOException, DataAccessException {
+    private void connect( String authToken, int gameID, Session session) throws IOException, DataAccessException {
 
 
-        connections.add(gameID, session);
+        connections.add(authToken, session);
+        Connection connection = connections.getConnection(authToken);
 
         AuthData authData = server.Server.authDAO.getAuth(authToken);
         GameData gameData = server.Server.gameDAO.getGame(gameID);
 
-        var message = String.format("Player %s has connected to game:%d", authData.getUsername(), gameID);
-
         LoadGame loadGame = new LoadGame(gameData.getGame());
-        System.out.println(loadGame.getGame().getBoard().toString());
-        //Connection connection = connections.getConnection(gameID);
-        //connection.send(message);
+
+        connection.send(loadGame);
+        Notification notification = new Notification(authData.getUsername() + " has joined game " + gameID + " as ");
+        connections.broadcast(authToken, notification);
     }
 }

@@ -5,31 +5,32 @@ import websocket.messages.ServerMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionManager {
-    public final ConcurrentHashMap<Integer, Connection> connections
+    public final ConcurrentHashMap<String, Connection> connections
             = new ConcurrentHashMap<>();
 
-    public void add(int gameID, Session session) {
-        var connection = new Connection(gameID, session);
-        connections.put(gameID, connection);
+    public void add(String authToken, Session session) {
+        var connection = new Connection(authToken, session);
+        connections.put(authToken, connection);
     }
 
-    public void remove(int gameID) {
-        connections.remove(gameID);
+    public void remove(String authToken) {
+        connections.remove(authToken);
     }
 
-    public Connection getConnection(int gameID) {
-        return connections.get(gameID);
+    public Connection getConnection(String authToken) {
+        return connections.get(authToken);
     }
 
-    public void broadcast(int excludeGameID, ServerMessage message) throws IOException {
+    public void broadcast(String excludeToken, ServerMessage message) throws IOException {
         var removeList = new ArrayList<Connection>();
         for(var c: connections.values()) {
             if(c.session.isOpen()) {
-                if(!(c.gameID == excludeGameID)) {
-                    c.send(message.toString());
+                if(!(Objects.equals(c.authToken, excludeToken))) {
+                    c.send(message);
                 }
             } else {
                 removeList.add(c);
@@ -37,7 +38,7 @@ public class ConnectionManager {
         }
 
         for(var c: removeList) {
-            connections.remove(c.gameID);
+            connections.remove(c.authToken);
         }
     }
 
