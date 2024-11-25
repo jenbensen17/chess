@@ -44,7 +44,19 @@ public class WebSocketHandler {
             case CONNECT -> connect(command, session);
             case MAKE_MOVE -> makeMove(new Gson().fromJson(message, MakeMove.class), session);
             case LEAVE -> leave(command, session);
+            case RESIGN -> resign(command, session);
         }
+    }
+
+    private void resign(UserGameCommand command, Session session) throws DataAccessException, IOException {
+        Connection connection = connections.getConnection(command.getAuthToken());
+        AuthData authData = server.Server.authDAO.getAuth(command.getAuthToken());
+        GameData gameData = server.Server.gameDAO.getGame(command.getGameID());
+        gameData.getGame().endGame();
+        Server.gameDAO.updateGameState(gameData);
+        Notification notification = new Notification(authData.getUsername() + " has resigned from the game.");
+        connection.send(notification);
+        connections.broadcast(authData.getAuthToken(), notification);
     }
 
     private void connect( UserGameCommand command, Session session) throws IOException {

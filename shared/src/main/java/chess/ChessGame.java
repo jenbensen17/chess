@@ -11,9 +11,11 @@ import java.util.Objects;
  */
 public class ChessGame {
     private final GameState state;
+    private boolean gameOver;
 
     public ChessGame() {
         state = new GameState();
+        gameOver = false;
     }
 
     /**
@@ -58,7 +60,7 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        if (state.board().getPiece(move.getStartPosition()) == null) {
+        if (state.board().getPiece(move.getStartPosition()) == null || gameOver) {
             throw new InvalidMoveException();
         }
         Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
@@ -133,5 +135,13 @@ public class ChessGame {
     @Override
     public int hashCode() {
         return Objects.hash(state.turn(), state.board());
+    }
+
+    public boolean getGameOver(){
+        return gameOver;
+    }
+
+    public void endGame() {
+        gameOver = true;
     }
 }
