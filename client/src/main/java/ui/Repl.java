@@ -30,6 +30,9 @@ public class Repl {
 
         while (!result.equalsIgnoreCase("quit")) {
             var stateString = state == State.SIGNEDOUT ? "[LOGGED_OUT]" : "[LOGGED_IN]";
+            if(state == State.INGAME) {
+                stateString = "[PLAYING_GAME]";
+            }
             System.out.print(stateString + " >>> ");
             String line = scanner.nextLine();
             try {
@@ -46,9 +49,7 @@ public class Repl {
             }
             if (state == State.INGAME && !(ui instanceof GameplayUI)) {
                 //ws = new WebSocketFacade(server.getServerUrl(), notificationHandler);
-
                 ui = new GameplayUI(server);
-                ui.eval("help");
             }
         }
 

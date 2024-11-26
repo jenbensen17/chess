@@ -78,11 +78,11 @@ public class WebSocketHandler {
 
             AuthData authData = server.Server.authDAO.getAuth(command.getAuthToken());
             GameData gameData = server.Server.gameDAO.getGame(command.getGameID());
-
+            ChessGame.TeamColor color = getUserColor(authData, gameData);
             LoadGame loadGame = new LoadGame(gameData.getGame());
 
             connection.send(loadGame);
-            Notification notification = new Notification(authData.getUsername() + " has joined game " + command.getGameID() + " as ");
+            Notification notification = new Notification(authData.getUsername() + " has joined game " + command.getGameID() + " as "+color);
             connections.broadcast(command.getAuthToken(), notification);
         } catch (DataAccessException e) {
             Connection connection = connections.getConnection(command.getAuthToken());
