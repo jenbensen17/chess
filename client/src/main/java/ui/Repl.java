@@ -12,6 +12,7 @@ public class Repl {
 
     private final ServerFacade server;
     private static State state = State.SIGNEDOUT;
+    private static ChessGame.TeamColor userColor;
     private UI ui;
     private WebSocketFacade ws;
     private final NotificationHandler notificationHandler;
@@ -55,5 +56,13 @@ public class Repl {
 
     public static void setState(State s) {
         state = s;
+    }
+
+    public static void setUserColor(ChessGame.TeamColor color) {
+        userColor = color;
+    }
+
+    public static ChessGame.TeamColor getUserColor() {
+        return userColor;
     }
 }

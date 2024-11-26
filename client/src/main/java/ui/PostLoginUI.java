@@ -108,9 +108,9 @@ public class PostLoginUI extends UI {
 
                 ws = new WebSocketFacade(server.getServerUrl(), new NotificationHandler());
                 ws.connect(getAuthData().getAuthToken(), gameID);
-
-                printGame(gameID);
-                return "Game successfully joined";
+                Repl.setUserColor(color);
+                //printGame(gameID);
+                return "";
             } catch (Throwable e) {
                 return "Unable to join game";
             }
@@ -125,8 +125,8 @@ public class PostLoginUI extends UI {
                 game = g;
             }
         }
-        printBoard(game.getGame().getBoard(), ChessGame.TeamColor.WHITE);
-        printBoard(game.getGame().getBoard(), ChessGame.TeamColor.BLACK);
+        BoardPrinter.printBoard(game.getGame().getBoard(), ChessGame.TeamColor.WHITE);
+        BoardPrinter.printBoard(game.getGame().getBoard(), ChessGame.TeamColor.BLACK);
     }
 
     private String observe(String... params) {
@@ -143,97 +143,6 @@ public class PostLoginUI extends UI {
         }
     }
 
-    private void printBoard(ChessBoard board, ChessGame.TeamColor color) {
-        System.out.println();
-        printColumn(color);
-
-        boolean light = true;
-        int limit = color == ChessGame.TeamColor.WHITE ? 8 : 1;
-        int inc = color == ChessGame.TeamColor.WHITE ? 1 : -1;
-        for (int i = color == ChessGame.TeamColor.WHITE ? 1 : 8; i != limit + inc; i += inc) {
-            printRow(i);
-            for (int j = color == ChessGame.TeamColor.WHITE ? 1 : 8; j != limit + inc; j += inc) {
-                bg(light);
-                if (board.getPiece(new ChessPosition(i, j)) != null) {
-                    ChessPiece piece = board.getPiece(new ChessPosition(i, j));
-                    String rep = piece.getPieceType().toString();
-                    if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                        printPiece(piece, WHITE_KING, WHITE_QUEEN, WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_PAWN, light);
-                    } else {
-                        printPiece(piece, BLACK_KING, BLACK_QUEEN, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_PAWN, light);
-                    }
-                } else {
-                    System.out.print(EMPTY);
-                }
-                light = !light;
-            }
-            printRow(i);
-            System.out.print(RESET_BG_COLOR);
-            System.out.print("\n");
-            light = !light;
-        }
-        printColumn(color);
-        System.out.print("\n");
-    }
-
-    private void printPiece(ChessPiece piece, String king, String queen, String knight, String bishop, String rook, String pawn, boolean light) {
-        switch (piece.getPieceType()) {
-            case KING -> {
-                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE && !light) {
-                    System.out.print(king);
-                } else {
-                    System.out.print(queen);
-                }
-            }
-            case QUEEN -> {
-                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE && light) {
-                    System.out.print(queen);
-                } else {
-                    System.out.print(king);
-                }
-            }
-            case KNIGHT -> System.out.print(knight);
-            case BISHOP -> System.out.print(bishop);
-            case ROOK -> System.out.print(rook);
-            case PAWN -> System.out.print(pawn);
-        }
-    }
-
-    private void bg(boolean light) {
-        if (light) {
-            System.out.print(SET_BG_COLOR_BLUE);
-        } else {
-            System.out.print(SET_BG_COLOR_DARK_GREY);
-        }
-    }
-
-    private void printColumn(ChessGame.TeamColor color) {
-        System.out.print(SET_TEXT_COLOR_WHITE);
-        System.out.print(SET_BG_COLOR_LIGHT_GREY);
-        System.out.print(SET_TEXT_BOLD);
-        System.out.print(EMPTY);
-        if (color == ChessGame.TeamColor.BLACK) {
-            for (char c = 97; c < 105; c++) {
-                System.out.print(" " + c + " ");
-            }
-        } else {
-            for (char c = 104; c > 96; c--) {
-                System.out.print(" " + c + " ");
-            }
-        }
-        System.out.print(EMPTY);
-        System.out.println(RESET_BG_COLOR);
-        System.out.print(RESET_TEXT_BOLD_FAINT);
-    }
-
-    private void printRow(int i) {
-        System.out.print(SET_TEXT_COLOR_WHITE);
-        System.out.print(SET_BG_COLOR_LIGHT_GREY);
-        System.out.print(SET_TEXT_BOLD);
-        System.out.print(" " + i + " ");
-        System.out.print(RESET_BG_COLOR);
-        System.out.print(RESET_TEXT_BOLD_FAINT);
-    }
 
 
 }

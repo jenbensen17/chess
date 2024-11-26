@@ -2,8 +2,12 @@ package client.websocket;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import ui.BoardPrinter;
+import ui.Repl;
 import websocket.commands.UserGameCommand;
+import websocket.messages.LoadGame;
 import websocket.messages.Notification;
+import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
 
@@ -27,13 +31,22 @@ public class WebSocketFacade extends Endpoint{
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
-                    Notification notification = new Gson().fromJson(message, Notification.class);
-                    notificationHandler.notify(notification);
+                    ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
+                    switch(serverMessage.getServerMessageType()) {
+                        case LOAD_GAME -> {
+                            LoadGame loadGame = new Gson().fromJson(message, LoadGame.class);
+                            loadGame(loadGame);
+                        }
+                    }
                 }
             });
         } catch (DeploymentException | IOException | URISyntaxException e) {
             throw new Exception();
         }
+    }
+
+    private void loadGame(LoadGame loadGame) {
+        BoardPrinter.printBoard(loadGame.getGame().getBoard(), Repl.getUserColor());
     }
 
     @Override
