@@ -6,6 +6,8 @@ import chess.ChessPiece;
 import chess.ChessPosition;
 import client.ServerFacade;
 import client.State;
+import client.websocket.NotificationHandler;
+import client.websocket.WebSocketFacade;
 import model.GameData;
 
 import java.util.*;
@@ -15,6 +17,7 @@ import static ui.EscapeSequences.*;
 public class PostLoginUI extends UI {
     private final ServerFacade server;
     private Map<String, Integer> games;
+    private WebSocketFacade ws;
 
     public PostLoginUI(ServerFacade server) {
         this.server = server;
@@ -102,6 +105,10 @@ public class PostLoginUI extends UI {
                 int gameID = games.get(params[0]);
                 server.joinGame(getAuthData().getAuthToken(), color, gameID);
                 Repl.setState(State.INGAME);
+
+                ws = new WebSocketFacade(server.getServerUrl(), new NotificationHandler());
+                ws.connect(getAuthData().getAuthToken(), gameID);
+
                 printGame(gameID);
                 return "Game successfully joined";
             } catch (Throwable e) {

@@ -22,6 +22,10 @@ public class ServerFacade {
         this.serverUrl += serverUrl;
     }
 
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
     public AuthData register(String username, String password, String email) {
         var req = Map.of("username", username, "password", password, "email", email);
         Map resp = makeRequest("POST", "/user", req, null, Map.class);

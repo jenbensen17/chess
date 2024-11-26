@@ -1,7 +1,10 @@
 package ui;
 
+import chess.ChessGame;
 import client.ServerFacade;
 import client.State;
+import client.websocket.NotificationHandler;
+import client.websocket.WebSocketFacade;
 
 import java.util.Scanner;
 
@@ -10,14 +13,17 @@ public class Repl {
     private final ServerFacade server;
     private static State state = State.SIGNEDOUT;
     private UI ui;
+    private WebSocketFacade ws;
+    private final NotificationHandler notificationHandler;
 
-    public Repl(ServerFacade server) {
+    public Repl(ServerFacade server) throws Exception {
+        this.notificationHandler = new NotificationHandler();
         System.out.println("♕ Welcome to 240 Chess. Type Help to get started. ♕\n");
         this.server = server;
         ui = new PreLoginUI(server);
     }
 
-    public void run() {
+    public void run() throws Exception {
         Scanner scanner = new Scanner(System.in);
         var result = "";
 
@@ -38,8 +44,9 @@ public class Repl {
                 ui = new PostLoginUI(server);
             }
             if (state == State.INGAME && !(ui instanceof GameplayUI)) {
+                //ws = new WebSocketFacade(server.getServerUrl(), notificationHandler);
+
                 ui = new GameplayUI(server);
-                System.out.println("JOINED GAME");
                 ui.eval("help");
             }
         }
