@@ -101,6 +101,7 @@ public class PostLoginUI extends UI {
                 ChessGame.TeamColor color = params[1].equals("black") ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
                 int gameID = games.get(params[0]);
                 server.joinGame(getAuthData().getAuthToken(), color, gameID);
+                Repl.setState(State.INGAME);
                 printGame(gameID);
                 return "Game successfully joined";
             } catch (Throwable e) {

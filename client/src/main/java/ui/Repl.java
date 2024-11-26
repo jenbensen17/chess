@@ -37,6 +37,11 @@ public class Repl {
             if (state == State.SIGNEDIN && !(ui instanceof PostLoginUI)) {
                 ui = new PostLoginUI(server);
             }
+            if (state == State.INGAME && !(ui instanceof GameplayUI)) {
+                ui = new GameplayUI(server);
+                System.out.println("JOINED GAME");
+                ui.eval("help");
+            }
         }
 
     }
