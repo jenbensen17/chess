@@ -82,7 +82,13 @@ public class WebSocketHandler {
             LoadGame loadGame = new LoadGame(gameData.getGame());
 
             connection.send(loadGame);
-            Notification notification = new Notification(authData.getUsername() + " has joined game " + command.getGameID() + " as "+color);
+            Notification notification;
+            if(command.isPlayer()) {
+                notification = new Notification(authData.getUsername() + " has joined game " + command.getGameID() + " as " + color);
+            } else {
+                notification = new Notification(authData.getUsername() + " has joined game " + command.getGameID() + " as an observer");
+            }
+            //connection.send(notification);
             connections.broadcast(command.getAuthToken(), notification);
         } catch (DataAccessException e) {
             Connection connection = connections.getConnection(command.getAuthToken());

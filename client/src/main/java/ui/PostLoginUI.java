@@ -107,6 +107,7 @@ public class PostLoginUI extends UI {
                 Repl.setState(State.INGAME);
                 Repl.setUserColor(color);
                 setGameID(gameID);
+                setIsPlayer(true);
                 //printGame(gameID);
                 return "";
             } catch (Throwable e) {
@@ -135,6 +136,9 @@ public class PostLoginUI extends UI {
                 int gameID = games.get(params[0]);
                 printGame(gameID);
                 setGameID(gameID);
+                setIsPlayer(false);
+                Repl.setState(State.INGAME);
+                Repl.setUserColor(ChessGame.TeamColor.WHITE);
                 return "Game Observed";
             } catch (Throwable e) {
                 return "Unable to observe game";

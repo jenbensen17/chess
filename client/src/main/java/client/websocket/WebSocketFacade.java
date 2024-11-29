@@ -4,6 +4,7 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import ui.BoardPrinter;
 import ui.Repl;
+import ui.UI;
 import websocket.commands.UserGameCommand;
 import websocket.messages.LoadGame;
 import websocket.messages.Notification;
@@ -59,6 +60,7 @@ public class WebSocketFacade extends Endpoint{
 
     public void connect(String authToken, int gameID) throws IOException {
         var message = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
+        message.setIsPlayer(UI.isPlayer());
         this.session.getBasicRemote().sendText(new Gson().toJson(message));
     }
 }

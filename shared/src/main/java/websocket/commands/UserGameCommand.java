@@ -16,6 +16,8 @@ public class UserGameCommand {
 
     private final Integer gameID;
 
+    private boolean isPlayer = true;
+
     public UserGameCommand(CommandType commandType, String authToken, Integer gameID) {
         this.commandType = commandType;
         this.authToken = authToken;
@@ -39,6 +41,14 @@ public class UserGameCommand {
 
     public Integer getGameID() {
         return gameID;
+    }
+
+    public boolean isPlayer(){
+        return isPlayer;
+    }
+
+    public void setIsPlayer(boolean b) {
+        this.isPlayer = b;
     }
 
     @Override
