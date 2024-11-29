@@ -59,6 +59,6 @@ public class WebSocketFacade extends Endpoint{
 
     public void connect(String authToken, int gameID) throws IOException {
         var message = new UserGameCommand(UserGameCommand.CommandType.CONNECT, authToken, gameID);
-        this.session.getAsyncRemote().sendText(new Gson().toJson(message));
+        this.session.getBasicRemote().sendText(new Gson().toJson(message));
     }
 }

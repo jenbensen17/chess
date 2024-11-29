@@ -49,6 +49,8 @@ public class Repl {
             }
             if (state == State.INGAME && !(ui instanceof GameplayUI)) {
                 //ws = new WebSocketFacade(server.getServerUrl(), notificationHandler);
+                ws = new WebSocketFacade(server.getServerUrl(), new NotificationHandler());
+                ws.connect(ui.getAuthData().getAuthToken(), ui.getGameID());
                 ui = new GameplayUI(server);
             }
         }

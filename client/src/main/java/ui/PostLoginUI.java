@@ -105,10 +105,8 @@ public class PostLoginUI extends UI {
                 int gameID = games.get(params[0]);
                 server.joinGame(getAuthData().getAuthToken(), color, gameID);
                 Repl.setState(State.INGAME);
-
-                ws = new WebSocketFacade(server.getServerUrl(), new NotificationHandler());
-                ws.connect(getAuthData().getAuthToken(), gameID);
                 Repl.setUserColor(color);
+                setGameID(gameID);
                 //printGame(gameID);
                 return "";
             } catch (Throwable e) {
@@ -136,6 +134,7 @@ public class PostLoginUI extends UI {
             try {
                 int gameID = games.get(params[0]);
                 printGame(gameID);
+                setGameID(gameID);
                 return "Game Observed";
             } catch (Throwable e) {
                 return "Unable to observe game";
