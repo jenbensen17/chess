@@ -47,8 +47,8 @@ public class PostLoginUI extends UI {
         return """
                 create <NAME> - a game
                 list - games
-                join <ID> [WHITE|BLACK] - a game
-                observe <ID> - a game
+                join <NUMBER> [WHITE|BLACK] - a game
+                observe <NUMBER> - a game
                 logout - when you are done
                 quit - playing chess
                 help - with possible commands

@@ -1,12 +1,16 @@
 package ui;
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPiece;
+import chess.ChessPosition;
 import client.ServerFacade;
 import client.State;
 import client.websocket.WebSocketFacade;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class GameplayUI extends UI{
 
@@ -29,11 +33,61 @@ public class GameplayUI extends UI{
                 case "help" -> help();
                 case "redraw chess board" -> redraw();
                 case "leave" -> leave();
+                case "make move" -> makeMove();
                 default -> help();
             };
         } catch (Exception e) {
             return e.getMessage();
         }
+    }
+
+    private String makeMove() {
+
+
+        ChessPosition startPosition = null;
+        ChessPosition endPosition = null;
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Start Position: (ex: a7)");
+            String startPositionString = scanner.nextLine();
+            System.out.print("End Position: (ex: a5)");
+            String endPositionString = scanner.nextLine();
+
+            int startRow = Integer.parseInt(startPositionString.substring(1));
+            char startCol = startPositionString.charAt(0);
+            char endCol = endPositionString.charAt(0);
+            int endRow = Integer.parseInt(endPositionString.substring(1));
+            ChessPiece promotionPiece = new ChessPiece(teamColor, null);
+            startPosition = new ChessPosition(startRow, startCol-96);
+            endPosition = new ChessPosition(endRow, endCol-96);
+
+            ChessPiece piece = game.getBoard().getPiece(startPosition);
+            if (piece.getPieceType().equals(ChessPiece.PieceType.PAWN)) {
+                if(endRow == 1 || endRow == 8) {
+                    System.out.print("Promotion Piece: (example: queen)");
+                    String promotionPieceString = scanner.nextLine();
+                    switch (promotionPieceString) {
+                        case "queen" -> promotionPiece = new ChessPiece(teamColor, ChessPiece.PieceType.QUEEN);
+                        case "bishop" -> promotionPiece = new ChessPiece(teamColor, ChessPiece.PieceType.BISHOP);
+                        case "rook" -> promotionPiece = new ChessPiece(teamColor, ChessPiece.PieceType.ROOK);
+                        case "knight" -> promotionPiece = new ChessPiece(teamColor, ChessPiece.PieceType.KNIGHT);
+                        default -> throw new IllegalStateException("Unexpected value: " + promotionPieceString);
+
+                    }
+                }
+            }
+
+
+            ChessMove move = new ChessMove(startPosition, endPosition, promotionPiece.getPieceType());
+
+            websocket.makeMove(getAuthData().getAuthToken(), getGameID(), move);
+
+        } catch (IllegalStateException e) {
+            return "Please enter a valid promotion piece";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return "";
     }
 
     private String leave() throws IOException {
