@@ -134,12 +134,12 @@ public class PostLoginUI extends UI {
         } else {
             try {
                 int gameID = games.get(params[0]);
-                printGame(gameID);
+                //printGame(gameID);
                 setGameID(gameID);
                 setIsPlayer(false);
                 Repl.setState(State.INGAME);
                 Repl.setUserColor(ChessGame.TeamColor.WHITE);
-                return "Game Observed";
+                return "Observing game...";
             } catch (Throwable e) {
                 return "Unable to observe game";
             }

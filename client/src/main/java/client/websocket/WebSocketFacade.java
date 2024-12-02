@@ -3,6 +3,7 @@ package client.websocket;
 import chess.ChessGame;
 import com.google.gson.Gson;
 import ui.BoardPrinter;
+import ui.GameplayUI;
 import ui.Repl;
 import ui.UI;
 import websocket.commands.UserGameCommand;
@@ -52,6 +53,8 @@ public class WebSocketFacade extends Endpoint{
 
     private void loadGame(LoadGame loadGame) {
         BoardPrinter.printBoard(loadGame.getGame().getBoard(), Repl.getUserColor());
+        GameplayUI.setGame(loadGame.getGame());
+        GameplayUI.setColor(Repl.getUserColor());
     }
 
     @Override
