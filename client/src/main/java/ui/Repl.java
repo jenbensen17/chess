@@ -51,7 +51,7 @@ public class Repl {
                 //ws = new WebSocketFacade(server.getServerUrl(), notificationHandler);
                 ws = new WebSocketFacade(server.getServerUrl(), new NotificationHandler());
                 ws.connect(ui.getAuthData().getAuthToken(), ui.getGameID());
-                ui = new GameplayUI(server);
+                ui = new GameplayUI(server, ws);
             }
         }
 
