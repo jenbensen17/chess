@@ -55,8 +55,17 @@ public class GameplayUI extends UI{
 
             int startRow = Integer.parseInt(startPositionString.substring(1));
             char startCol = startPositionString.charAt(0);
+
+
+
             char endCol = endPositionString.charAt(0);
             int endRow = Integer.parseInt(endPositionString.substring(1));
+
+            if(teamColor == ChessGame.TeamColor.WHITE) {
+                startCol +=7;
+                endCol +=7;
+            }
+
             ChessPiece promotionPiece = new ChessPiece(teamColor, null);
             startPosition = new ChessPosition(startRow, startCol-96);
             endPosition = new ChessPosition(endRow, endCol-96);
