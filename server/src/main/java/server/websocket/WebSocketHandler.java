@@ -164,7 +164,9 @@ public class WebSocketHandler {
         AuthData authData = Server.authDAO.getAuth(command.getAuthToken());
         GameData gameData = Server.gameDAO.getGame(command.getGameID());
         ChessGame.TeamColor color = getUserColor(authData, gameData);
-        Server.gameDAO.removePlayer(gameData.getGameID(), color);
+        if(command.isPlayer()) {
+            Server.gameDAO.removePlayer(gameData.getGameID(), color);
+        }
         connection.session.close();
         Notification notification = new Notification(authData.getUsername() + " has left the game");
         connections.broadcast(command.getAuthToken(), notification);

@@ -10,6 +10,10 @@ import static ui.EscapeSequences.*;
 public class BoardPrinter {
 
     public static void printBoard(ChessBoard board, ChessGame.TeamColor color, Collection<ChessMove> legalMoves) {
+
+        color = color == ChessGame.TeamColor.WHITE ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
+
+
         System.out.println();
         printColumn(color);
 
