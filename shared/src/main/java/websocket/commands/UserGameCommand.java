@@ -16,7 +16,7 @@ public class UserGameCommand {
 
     private final Integer gameID;
 
-    private boolean isPlayer = true;
+    private boolean isObserver = false;
 
     public UserGameCommand(CommandType commandType, String authToken, Integer gameID) {
         this.commandType = commandType;
@@ -43,12 +43,12 @@ public class UserGameCommand {
         return gameID;
     }
 
-    public boolean isPlayer(){
-        return isPlayer;
+    public boolean isObserver(){
+        return isObserver;
     }
 
-    public void setIsPlayer(boolean b) {
-        this.isPlayer = b;
+    public void setIsObserver(boolean b) {
+        this.isObserver = b;
     }
 
     @Override

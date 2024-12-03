@@ -82,7 +82,7 @@ public class WebSocketHandler {
 
             connection.send(loadGame);
             Notification notification;
-            if(command.isPlayer()) {
+            if(!command.isObserver()) {
                 notification = new Notification(authData.getUsername() + " has joined game " + command.getGameID() + " as " + color);
             } else {
                 notification = new Notification(authData.getUsername() + " has joined game " + command.getGameID() + " as an observer");
@@ -164,7 +164,7 @@ public class WebSocketHandler {
         AuthData authData = Server.authDAO.getAuth(command.getAuthToken());
         GameData gameData = Server.gameDAO.getGame(command.getGameID());
         ChessGame.TeamColor color = getUserColor(authData, gameData);
-        if(command.isPlayer()) {
+        if(!command.isObserver()) {
             Server.gameDAO.removePlayer(gameData.getGameID(), color);
         }
         connection.session.close();
