@@ -7,6 +7,7 @@ import client.websocket.WebSocketFacade;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Scanner;
 
 public class GameplayUI extends UI{
@@ -32,11 +33,24 @@ public class GameplayUI extends UI{
                 case "leave" -> leave();
                 case "make move" -> makeMove();
                 case "resign" -> resign();
+                case "highlight legal moves" -> highlightMoves();
                 default -> help();
             };
         } catch (Exception e) {
             return e.getMessage();
         }
+    }
+
+    private String highlightMoves() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Please input what piece you want to highlight moves: (ex: a7) ");
+        String input = scanner.nextLine();
+        int row = Integer.parseInt(input.substring(1));
+        char col = getCol(input.charAt(0));
+        ChessPosition position = new ChessPosition(row, col);
+        Collection<ChessMove> legalMoves = game.validMoves(position);
+        BoardPrinter.printBoard(game.getBoard(), teamColor, legalMoves);
+        return "";
     }
 
     private String resign() throws IOException {
@@ -138,7 +152,7 @@ public class GameplayUI extends UI{
     }
 
     private String redraw() {
-        BoardPrinter.printBoard(game.getBoard(), teamColor);
+        BoardPrinter.printBoard(game.getBoard(), teamColor, null);
         return "";
     }
 

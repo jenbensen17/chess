@@ -124,8 +124,8 @@ public class PostLoginUI extends UI {
                 game = g;
             }
         }
-        BoardPrinter.printBoard(game.getGame().getBoard(), ChessGame.TeamColor.WHITE);
-        BoardPrinter.printBoard(game.getGame().getBoard(), ChessGame.TeamColor.BLACK);
+        BoardPrinter.printBoard(game.getGame().getBoard(), ChessGame.TeamColor.WHITE, null);
+        BoardPrinter.printBoard(game.getGame().getBoard(), ChessGame.TeamColor.BLACK, null);
     }
 
     private String observe(String... params) {

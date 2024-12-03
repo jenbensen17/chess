@@ -60,7 +60,7 @@ public class WebSocketFacade extends Endpoint{
     }
 
     private void loadGame(LoadGame loadGame) {
-        BoardPrinter.printBoard(loadGame.getGame().getBoard(), Repl.getUserColor());
+        BoardPrinter.printBoard(loadGame.getGame().getBoard(), Repl.getUserColor(), null);
         GameplayUI.setGame(loadGame.getGame());
         GameplayUI.setColor(Repl.getUserColor());
     }

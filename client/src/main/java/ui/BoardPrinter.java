@@ -1,17 +1,24 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
+
+import java.util.Collection;
+import java.util.HashSet;
 
 import static ui.EscapeSequences.*;
 
 public class BoardPrinter {
 
-    public static void printBoard(ChessBoard board, ChessGame.TeamColor color) {
+    public static void printBoard(ChessBoard board, ChessGame.TeamColor color, Collection<ChessMove> legalMoves) {
         System.out.println();
         printColumn(color);
+
+        Collection<ChessPosition> endPositions = new HashSet<ChessPosition>();
+        if (legalMoves != null) {
+            for (ChessMove move : legalMoves) {
+                endPositions.add(move.getEndPosition());
+            }
+        }
 
         boolean light = true;
         int limit = color == ChessGame.TeamColor.WHITE ? 8 : 1;
@@ -19,7 +26,11 @@ public class BoardPrinter {
         for (int i = color == ChessGame.TeamColor.WHITE ? 1 : 8; i != limit + inc; i += inc) {
             printRow(i);
             for (int j = color == ChessGame.TeamColor.WHITE ? 1 : 8; j != limit + inc; j += inc) {
-                bg(light);
+                if(endPositions.contains(new ChessPosition(i, j))) {
+                    bgLegal(light);
+                } else {
+                    bg(light);
+                }
                 if (board.getPiece(new ChessPosition(i, j)) != null) {
                     ChessPiece piece = board.getPiece(new ChessPosition(i, j));
                     String rep = piece.getPieceType().toString();
@@ -41,6 +52,7 @@ public class BoardPrinter {
         printColumn(color);
         System.out.print("\n");
     }
+
 
     private static void printPiece(ChessPiece piece, String king, String queen, String knight, String bishop, String rook, String pawn, boolean light) {
         switch (piece.getPieceType()) {
@@ -70,6 +82,14 @@ public class BoardPrinter {
             System.out.print(SET_BG_COLOR_BLUE);
         } else {
             System.out.print(SET_BG_COLOR_DARK_GREY);
+        }
+    }
+
+    private static void bgLegal(boolean light) {
+        if (light) {
+            System.out.print(SET_BG_COLOR_GREEN);
+        } else {
+            System.out.print(SET_BG_COLOR_DARK_GREEN);
         }
     }
 
