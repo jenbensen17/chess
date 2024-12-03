@@ -1,9 +1,6 @@
 package ui;
 
-import chess.ChessGame;
-import chess.ChessMove;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 import client.ServerFacade;
 import client.State;
 import client.websocket.WebSocketFacade;
@@ -34,10 +31,23 @@ public class GameplayUI extends UI{
                 case "redraw chess board" -> redraw();
                 case "leave" -> leave();
                 case "make move" -> makeMove();
+                case "resign" -> resign();
                 default -> help();
             };
         } catch (Exception e) {
             return e.getMessage();
+        }
+    }
+
+    private String resign() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Are you sure you want to resign? [Y/N] ");
+        String input = scanner.nextLine();
+        if(input.equalsIgnoreCase("y")) {
+            websocket.resign(getAuthData().getAuthToken(), getGameID());
+            return "";
+        } else {
+            return "Action cancelled";
         }
     }
 
@@ -47,6 +57,9 @@ public class GameplayUI extends UI{
         ChessPosition startPosition = null;
         ChessPosition endPosition = null;
         try {
+            if(!UI.isPlayer()) {
+                throw new InvalidMoveException("NOT A PLAYER");
+            }
             Scanner scanner = new Scanner(System.in);
             System.out.print("Start Position: (ex: a7)");
             String startPositionString = scanner.nextLine();
@@ -96,8 +109,10 @@ public class GameplayUI extends UI{
             return "Please enter a valid promotion piece";
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             return "Invalid Chess Move.";
+        } catch (InvalidMoveException e) {
+            return e.getMessage();
         }
         return "";
     }
