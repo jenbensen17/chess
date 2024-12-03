@@ -48,7 +48,7 @@ public class WebSocketFacade extends Endpoint{
                         }
                         case ERROR -> {
                             Error error = new Gson().fromJson(message, Error.class);
-                            System.out.println(error.toString());
+                            System.out.println("\n"+error.toString());
                         }
                     }
                     ui.Repl.newInput();
