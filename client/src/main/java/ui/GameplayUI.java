@@ -43,6 +43,11 @@ public class GameplayUI extends UI{
 
     private String highlightMoves() {
         try {
+
+            if(game.isGameOver()) {
+                return "Game is over.";
+            }
+
             Scanner scanner = new Scanner(System.in);
             System.out.print("Please input what piece you want to highlight moves: (ex: a7) ");
             String input = scanner.nextLine();
@@ -75,6 +80,9 @@ public class GameplayUI extends UI{
 
     private String makeMove() {
 
+        if(game.isGameOver()) {
+            return "Game is over.";
+        }
 
         ChessPosition startPosition = null;
         ChessPosition endPosition = null;

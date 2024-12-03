@@ -137,16 +137,16 @@ public class WebSocketHandler {
         ChessGame.TeamColor otherPlayerColor = teamColor == ChessGame.TeamColor.WHITE ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
         Notification notification = null;
         if(gameData.getGame().isInCheckmate(otherPlayerColor)) {
-            notification = new Notification(otherPlayerUsername + "is in checkmate\nGame Over");
+            notification = new Notification(otherPlayerUsername + " is in checkmate\nGame Over");
         } else if(gameData.getGame().isInCheck(otherPlayerColor)) {
-            notification = new Notification(otherPlayerUsername + "is in check\nGame Over");
+            notification = new Notification(otherPlayerUsername + " is in check\nGame Over");
         } else if(gameData.getGame().isInStalemate(otherPlayerColor)) {
-            notification = new Notification(otherPlayerUsername + "is in stalemate\nGame Over");
+            notification = new Notification(otherPlayerUsername + " is in stalemate\nGame Over");
         }
 
         if(notification != null) {
             connection.send(notification);
-            connections.broadcast(otherPlayerUsername, notification);
+            connections.broadcast(authData.getAuthToken(), notification);
             gameData.getGame().endGame();
         }
 
