@@ -423,5 +423,5 @@ public class WebSocketTests {
         return types;
     }
 
-    private static record WebsocketUser(String username, String authToken) { }
+    private record WebsocketUser(String username, String authToken) { }
 }

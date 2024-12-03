@@ -35,7 +35,7 @@ public class Repl {
                 result = ui.eval(line);
                 System.out.println(result);
             } catch (Throwable e) {
-                System.out.println(e.toString());
+                System.out.println(e);
             }
             if (state == State.SIGNEDOUT && !(ui instanceof PreLoginUI)) {
                 ui = new PreLoginUI(server);
