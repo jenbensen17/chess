@@ -107,7 +107,7 @@ public class WebSocketHandler {
             GameData gameData = Server.gameDAO.getGame(command.getGameID());
             ChessGame.TeamColor color = getUserColor(authData, gameData);
             if(!(gameData.getGame().getTeamTurn() == color)) {
-                throw new InvalidMoveException();
+                throw new InvalidMoveException("Not your turn");
             }
             gameData.getGame().makeMove(command.getMove());
             Server.gameDAO.updateGameState(gameData);
@@ -118,7 +118,7 @@ public class WebSocketHandler {
             connections.broadcast(command.getAuthToken(), notification);
         } catch (InvalidMoveException | DataAccessException e) {
             Connection connection = connections.getConnection(command.getAuthToken());
-            Error err = new Error("Error: invalid move");
+            Error err = new Error("Error: " + e.getMessage());
             connection.send(err);
         } catch (IOException e) {
                 Error err = new Error("Error: bad auth token");

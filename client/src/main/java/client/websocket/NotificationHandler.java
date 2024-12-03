@@ -4,6 +4,6 @@ import websocket.messages.Notification;
 
 public class NotificationHandler {
     void notify(Notification notification) {
-        System.out.println(notification.toString());
+        System.out.println("NOTIFICATION: "+ notification.toString());
     }
 }

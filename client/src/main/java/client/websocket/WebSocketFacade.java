@@ -12,6 +12,7 @@ import websocket.commands.UserGameCommand;
 import websocket.messages.LoadGame;
 import websocket.messages.Notification;
 import websocket.messages.ServerMessage;
+import websocket.messages.Error;
 
 import javax.websocket.*;
 
@@ -36,7 +37,7 @@ public class WebSocketFacade extends Endpoint{
                 @Override
                 public void onMessage(String message) {
                     ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
-                    switch(serverMessage.getServerMessageType()) {
+                    switch (serverMessage.getServerMessageType()) {
                         case LOAD_GAME -> {
                             LoadGame loadGame = new Gson().fromJson(message, LoadGame.class);
                             loadGame(loadGame);
@@ -45,7 +46,12 @@ public class WebSocketFacade extends Endpoint{
                             Notification notification = new Gson().fromJson(message, Notification.class);
                             notificationHandler.notify(notification);
                         }
+                        case ERROR -> {
+                            Error error = new Gson().fromJson(message, Error.class);
+                            System.out.println(error.toString());
+                        }
                     }
+                    ui.Repl.newInput();
                 }
             });
         } catch (DeploymentException | IOException | URISyntaxException e) {

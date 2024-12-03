@@ -61,14 +61,15 @@ public class GameplayUI extends UI{
             char endCol = endPositionString.charAt(0);
             int endRow = Integer.parseInt(endPositionString.substring(1));
 
-            if(teamColor == ChessGame.TeamColor.WHITE) {
-                startCol +=7;
-                endCol +=7;
-            }
+
+            startCol = getCol(startCol);
+
+            endCol = getCol(endCol);
+
 
             ChessPiece promotionPiece = new ChessPiece(teamColor, null);
-            startPosition = new ChessPosition(startRow, startCol-96);
-            endPosition = new ChessPosition(endRow, endCol-96);
+            startPosition = new ChessPosition(startRow, startCol);
+            endPosition = new ChessPosition(endRow, endCol);
 
             ChessPiece piece = game.getBoard().getPiece(startPosition);
             if (piece.getPieceType().equals(ChessPiece.PieceType.PAWN)) {
@@ -95,8 +96,24 @@ public class GameplayUI extends UI{
             return "Please enter a valid promotion piece";
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (Exception e) {
+            return "Invalid Chess Move.";
         }
         return "";
+    }
+
+    private char getCol(char endCol) {
+        switch(endCol) {
+            case 'a' -> endCol = 8;
+            case 'b' -> endCol = 7;
+            case 'c' -> endCol = 6;
+            case 'd' -> endCol = 5;
+            case 'e' -> endCol = 4;
+            case 'f' -> endCol = 3;
+            case 'g' -> endCol = 2;
+            case 'h' -> endCol = 1;
+        }
+        return endCol;
     }
 
     private String leave() throws IOException {

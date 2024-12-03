@@ -29,11 +29,7 @@ public class Repl {
         var result = "";
 
         while (!result.equalsIgnoreCase("quit")) {
-            var stateString = state == State.SIGNEDOUT ? "[LOGGED_OUT]" : "[LOGGED_IN]";
-            if(state == State.INGAME) {
-                stateString = "[PLAYING_GAME]";
-            }
-            System.out.print(stateString + " >>> ");
+            newInput();
             String line = scanner.nextLine();
             try {
                 result = ui.eval(line);
@@ -55,6 +51,14 @@ public class Repl {
             }
         }
 
+    }
+
+    public static void newInput() {
+        var stateString = state == State.SIGNEDOUT ? "[LOGGED_OUT]" : "[LOGGED_IN]";
+        if(state == State.INGAME) {
+            stateString = "[PLAYING_GAME]";
+        }
+        System.out.print(stateString + " >>> ");
     }
 
     public static void setState(State s) {
