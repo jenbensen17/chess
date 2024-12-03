@@ -14,11 +14,15 @@ public class BoardPrinter {
         printColumn(color);
 
         Collection<ChessPosition> endPositions = new HashSet<ChessPosition>();
+        ChessPosition startPosition = new ChessPosition(-1,-2);
         if (legalMoves != null) {
             for (ChessMove move : legalMoves) {
                 endPositions.add(move.getEndPosition());
+                startPosition = move.getStartPosition();
             }
         }
+
+
 
         boolean light = true;
         int limit = color == ChessGame.TeamColor.WHITE ? 8 : 1;
@@ -26,8 +30,10 @@ public class BoardPrinter {
         for (int i = color == ChessGame.TeamColor.WHITE ? 1 : 8; i != limit + inc; i += inc) {
             printRow(i);
             for (int j = color == ChessGame.TeamColor.WHITE ? 1 : 8; j != limit + inc; j += inc) {
-                if(endPositions.contains(new ChessPosition(i, j))) {
+                if (endPositions.contains(new ChessPosition(i, j))) {
                     bgLegal(light);
+                } else if(startPosition.equals(new ChessPosition(i, j))) {
+                  bgStart();
                 } else {
                     bg(light);
                 }
@@ -51,6 +57,10 @@ public class BoardPrinter {
         }
         printColumn(color);
         System.out.print("\n");
+    }
+
+    private static void bgStart() {
+        System.out.print(SET_BG_COLOR_YELLOW);
     }
 
 

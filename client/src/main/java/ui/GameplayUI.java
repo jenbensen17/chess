@@ -42,14 +42,19 @@ public class GameplayUI extends UI{
     }
 
     private String highlightMoves() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Please input what piece you want to highlight moves: (ex: a7) ");
-        String input = scanner.nextLine();
-        int row = Integer.parseInt(input.substring(1));
-        char col = getCol(input.charAt(0));
-        ChessPosition position = new ChessPosition(row, col);
-        Collection<ChessMove> legalMoves = game.validMoves(position);
-        BoardPrinter.printBoard(game.getBoard(), teamColor, legalMoves);
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Please input what piece you want to highlight moves: (ex: a7) ");
+            String input = scanner.nextLine();
+            int row = Integer.parseInt(input.substring(1));
+            char col = getCol(input.charAt(0));
+            ChessPosition position = new ChessPosition(row, col);
+            Collection<ChessMove> legalMoves = game.validMoves(position);
+            game.getBoard().getPiece(position).getPieceType();
+            BoardPrinter.printBoard(game.getBoard(), teamColor, legalMoves);
+        } catch (Exception e) {
+            return "No piece at specified position";
+        }
         return "";
     }
 
