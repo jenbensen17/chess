@@ -66,20 +66,22 @@ public class BoardPrinter {
 
     private static void printPiece(ChessPiece piece, String king, String queen, String knight, String bishop, String rook, String pawn, boolean light) {
         switch (piece.getPieceType()) {
-            case KING -> {
-                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE && !light) {
-                    System.out.print(king);
-                } else {
-                    System.out.print(queen);
-                }
-            }
-            case QUEEN -> {
-                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE && light) {
-                    System.out.print(queen);
-                } else {
-                    System.out.print(king);
-                }
-            }
+//            case KING -> {
+//                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE && !light) {
+//                    System.out.print(king);
+//                } else {
+//                    System.out.print(queen);
+//                }
+//            }
+//            case QUEEN -> {
+//                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE && light) {
+//                    System.out.print(queen);
+//                } else {
+//                    System.out.print(king);
+//                }
+//            }
+            case KING -> System.out.print(king);
+            case QUEEN -> System.out.print(queen);
             case KNIGHT -> System.out.print(knight);
             case BISHOP -> System.out.print(bishop);
             case ROOK -> System.out.print(rook);

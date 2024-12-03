@@ -118,6 +118,9 @@ public class WebSocketHandler {
             connections.broadcast(command.getAuthToken(), loadGame);
             Notification notification = new Notification(authData.getUsername() + moveToString(loadGame.getGame().getBoard(), command.getMove(), command.getStartPosition(), command.getEndPosition()));
             connections.broadcast(command.getAuthToken(), notification);
+
+            checkGameStatus(gameData, authData, color, connection);
+
         } catch (InvalidMoveException | DataAccessException e) {
             Connection connection = connections.getConnection(command.getAuthToken());
             Error err = new Error("Error: " + (e.getMessage() == null ? "invalid move" : e.getMessage()));
@@ -125,6 +128,26 @@ public class WebSocketHandler {
         } catch (IOException e) {
                 Error err = new Error("Error: bad auth token");
                 session.getRemote().sendString(new Gson().toJson(err));
+        }
+
+    }
+
+    public void checkGameStatus(GameData gameData, AuthData authData, ChessGame.TeamColor teamColor, Connection connection) throws IOException {
+        String otherPlayerUsername = teamColor == ChessGame.TeamColor.WHITE ? gameData.getBlackUsername() : gameData.getWhiteUsername();
+        ChessGame.TeamColor otherPlayerColor = teamColor == ChessGame.TeamColor.WHITE ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
+        Notification notification = null;
+        if(gameData.getGame().isInCheckmate(otherPlayerColor)) {
+            notification = new Notification(otherPlayerUsername + "is in checkmate\nGame Over");
+        } else if(gameData.getGame().isInCheck(otherPlayerColor)) {
+            notification = new Notification(otherPlayerUsername + "is in check\nGame Over");
+        } else if(gameData.getGame().isInStalemate(otherPlayerColor)) {
+            notification = new Notification(otherPlayerUsername + "is in stalemate\nGame Over");
+        }
+
+        if(notification != null) {
+            connection.send(notification);
+            connections.broadcast(otherPlayerUsername, notification);
+            gameData.getGame().endGame();
         }
 
     }

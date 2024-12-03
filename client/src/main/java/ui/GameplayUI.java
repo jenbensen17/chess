@@ -46,6 +46,9 @@ public class GameplayUI extends UI{
             Scanner scanner = new Scanner(System.in);
             System.out.print("Please input what piece you want to highlight moves: (ex: a7) ");
             String input = scanner.nextLine();
+            if(input.length() != 2) {
+                return "Please input a valid position";
+            }
             int row = Integer.parseInt(input.substring(1));
             char col = getCol(input.charAt(0));
             ChessPosition position = new ChessPosition(row, col);
@@ -84,6 +87,10 @@ public class GameplayUI extends UI{
             String startPositionString = scanner.nextLine();
             System.out.print("End Position: (ex: a5) ");
             String endPositionString = scanner.nextLine();
+
+            if(startPositionString.length() != 2 || endPositionString.length() != 2) {
+                return "Please input valid positions";
+            }
 
             int startRow = Integer.parseInt(startPositionString.substring(1));
             char startCol = startPositionString.charAt(0);
