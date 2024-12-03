@@ -61,9 +61,9 @@ public class GameplayUI extends UI{
                 throw new InvalidMoveException("NOT A PLAYER");
             }
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Start Position: (ex: a7)");
+            System.out.print("Start Position: (ex: a7) ");
             String startPositionString = scanner.nextLine();
-            System.out.print("End Position: (ex: a5)");
+            System.out.print("End Position: (ex: a5) ");
             String endPositionString = scanner.nextLine();
 
             int startRow = Integer.parseInt(startPositionString.substring(1));
@@ -87,7 +87,7 @@ public class GameplayUI extends UI{
             ChessPiece piece = game.getBoard().getPiece(startPosition);
             if (piece.getPieceType().equals(ChessPiece.PieceType.PAWN)) {
                 if(endRow == 1 || endRow == 8) {
-                    System.out.print("Promotion Piece: (example: queen)");
+                    System.out.print("Promotion Piece: (example: queen) ");
                     String promotionPieceString = scanner.nextLine();
                     switch (promotionPieceString) {
                         case "queen" -> promotionPiece = new ChessPiece(teamColor, ChessPiece.PieceType.QUEEN);
