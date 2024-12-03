@@ -89,7 +89,7 @@ public class GameplayUI extends UI{
 
             ChessMove move = new ChessMove(startPosition, endPosition, promotionPiece.getPieceType());
 
-            websocket.makeMove(getAuthData().getAuthToken(), getGameID(), move);
+            websocket.makeMove(getAuthData().getAuthToken(), getGameID(), move, startPositionString, endPositionString);
 
         } catch (IllegalStateException e) {
             return "Please enter a valid promotion piece";

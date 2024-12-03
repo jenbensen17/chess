@@ -1,7 +1,6 @@
 package server.websocket;
 
-import chess.ChessGame;
-import chess.InvalidMoveException;
+import chess.*;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import model.AuthData;
@@ -115,7 +114,7 @@ public class WebSocketHandler {
             LoadGame loadGame = new LoadGame(gameData.getGame());
             connection.send(loadGame);
             connections.broadcast(command.getAuthToken(), loadGame);
-            Notification notification = new Notification("a new move was made");
+            Notification notification = new Notification(authData.getUsername() + moveToString(loadGame.getGame().getBoard(), command.getMove(), command.getStartPosition(), command.getEndPosition()));
             connections.broadcast(command.getAuthToken(), notification);
         } catch (InvalidMoveException | DataAccessException e) {
             Connection connection = connections.getConnection(command.getAuthToken());
@@ -126,6 +125,13 @@ public class WebSocketHandler {
                 session.getRemote().sendString(new Gson().toJson(err));
         }
 
+    }
+
+    public String moveToString(ChessBoard board, ChessMove move, String startPosition, String endPosition) {
+        ChessPiece.PieceType pieceType = board.getPiece(move.getEndPosition()).getPieceType();
+        ChessGame.TeamColor color = board.getPiece(move.getEndPosition()).getTeamColor();
+
+        return " moved their " + pieceType + " from " + startPosition + " to " + endPosition;
     }
 
     public void leave(UserGameCommand command, Session session) throws DataAccessException, IOException {
