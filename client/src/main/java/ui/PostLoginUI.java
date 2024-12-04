@@ -116,18 +116,6 @@ public class PostLoginUI extends UI {
         }
     }
 
-    private void printGame(int gameID) {
-        HashSet<GameData> games = server.listGames(getAuthData().getAuthToken());
-        GameData game = null;
-        for (GameData g : games) {
-            if (g.getGameID() == gameID) {
-                game = g;
-            }
-        }
-        BoardPrinter.printBoard(game.getGame().getBoard(), ChessGame.TeamColor.WHITE, null);
-        BoardPrinter.printBoard(game.getGame().getBoard(), ChessGame.TeamColor.BLACK, null);
-    }
-
     private String observe(String... params) {
         if (params.length == 0) {
             return "Please enter a valid game ID. To view games, use list command.";

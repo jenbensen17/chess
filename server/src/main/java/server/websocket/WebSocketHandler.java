@@ -116,7 +116,9 @@ public class WebSocketHandler {
             LoadGame loadGame = new LoadGame(gameData.getGame());
             connection.send(loadGame);
             connections.broadcast(command.getAuthToken(), loadGame);
-            Notification notification = new Notification(authData.getUsername() + moveToString(loadGame.getGame().getBoard(), command.getMove(), command.getStartPosition(), command.getEndPosition()));
+            Notification notification = new Notification(authData.getUsername() +
+                    moveToString(loadGame.getGame().getBoard(), command.getMove(),
+                            command.getStartPosition(), command.getEndPosition()));
             connections.broadcast(command.getAuthToken(), notification);
 
             checkGameStatus(gameData, authData, color, connection);
